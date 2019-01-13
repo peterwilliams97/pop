@@ -70,7 +70,6 @@ enum UnicodeTextDirection {
   textDirTopBottom
 };
 
-
 class HtmlString {
 public:
 
@@ -85,8 +84,8 @@ public:
 
   // Add a character to the string.
   void addChar(GfxState *state, double x, double y,
-	       double dx, double dy,
-	       Unicode u); 
+               double dx, double dy,
+               Unicode u);
   HtmlLink* getLink() { return link; }
   const HtmlFont &getFont() const { return *fonts->Get(fontpos); }
   void endString(); // postprocessing
@@ -94,20 +93,20 @@ public:
 private:
 // aender die text variable
   HtmlLink *link;
-  double xMin, xMax;		// bounding box x coordinates
-  double yMin, yMax;		// bounding box y coordinates
-  int col;			// starting column
-  Unicode *text;		// the text
-  double *xRight;		// right-hand x coord of each char
-  HtmlString *yxNext;		// next string in y-major order
-  HtmlString *xyNext;		// next string in x-major order
+  double xMin, xMax;                // bounding box x coordinates
+  double yMin, yMax;                // bounding box y coordinates
+  int col;                          // starting column
+  Unicode *text;                    // the text
+  double *xRight;                   // right-hand x coord of each char
+  HtmlString *yxNext;                // next string in y-major order
+  HtmlString *xyNext;                // next string in x-major order
   int fontpos;
   GooString* htext;
-  int len;			// length of text and xRight
-  int size;			// size of text and xRight arrays
-  UnicodeTextDirection dir;	// direction (left to right/right to left)
+  int len;                        // length of text and xRight
+  int size;                        // size of text and xRight arrays
+  UnicodeTextDirection dir;        // direction (left to right/right to left)
   HtmlFontAccu *fonts;
-  
+
   friend class HtmlPage;
 
 };
@@ -116,8 +115,6 @@ private:
 //------------------------------------------------------------------------
 // HtmlPage
 //------------------------------------------------------------------------
-
-
 
 class HtmlPage {
 public:
@@ -136,9 +133,9 @@ public:
 
   // Add a character to the current string.
   void addChar(GfxState *state, double x, double y,
-	       double dx, double dy, 
-		double ox, double oy, 
-		Unicode *u, int uLen); //unsigned char c);
+               double dx, double dy,
+               double ox, double oy,
+               Unicode *u, int uLen); //unsigned char c);
 
   void updateFont(GfxState *state);
 
@@ -153,7 +150,6 @@ public:
   // stops looking at bottom of page; otherwise stops looking at
   // <xMax>,<yMax>.  If found, sets the text bounding rectangle and
   // returns true; otherwise returns false.
-  
 
   // new functions
   void AddLink(const HtmlLink& x){
@@ -170,31 +166,32 @@ public:
 
   // Clear the page.
   void clear();
-  
+
   void conv();
+
 private:
   HtmlFont* getFont(HtmlString *hStr) { return fonts->Get(hStr->fontpos); }
 
-  double fontSize;		// current font size
-  bool rawOrder;		// keep strings in content stream order
+  double fontSize;               // current font size
+  bool rawOrder;                 // keep strings in content stream order
 
-  HtmlString *curStr;		// currently active string
+  HtmlString *curStr;            // currently active string
 
-  HtmlString *yxStrings;	// strings in y-major order
-  HtmlString *xyStrings;	// strings in x-major order
-  HtmlString *yxCur1, *yxCur2;	// cursors for yxStrings list
-  
+  HtmlString *yxStrings;        // strings in y-major order
+  HtmlString *xyStrings;        // strings in x-major order
+  HtmlString *yxCur1, *yxCur2;  // cursors for yxStrings list
+
   void setDocName(const char* fname);
   void dumpAsXML(FILE* f,int page);
   void dumpComplex(FILE* f, int page);
   int dumpComplexHeaders(FILE * const file, FILE *& pageFile, int page);
 
   // marks the position of the fonts that belong to current page (for noframes)
-  int fontsPageMarker; 
+  int fontsPageMarker;
   HtmlFontAccu *fonts;
-  HtmlLinks *links; 
+  HtmlLinks *links;
   GooList   *imgList;
-  
+
   GooString *DocName;
   GooString *imgExt;
   int pageWidth;
@@ -210,8 +207,8 @@ private:
 class HtmlMetaVar {
 public:
     HtmlMetaVar(const char *_name, const char *_content);
-    ~HtmlMetaVar();    
-    
+    ~HtmlMetaVar();
+
     HtmlMetaVar(const HtmlMetaVar &) = delete;
     HtmlMetaVar& operator=(const HtmlMetaVar &) = delete;
 
@@ -237,14 +234,14 @@ public:
   // (EUC-JP) text.  If <rawOrder> is true, the text is kept in content
   // stream order.
   HtmlOutputDev(Catalog *catalogA, const char *fileName, const char *title,
-	  const char *author,
-	  const char *keywords,
-	  const char *subject,
-	  const char *date,
-	  const char *extension,
-	  bool rawOrder,
-	  int firstPage = 1,
-	  bool outline = 0);
+          const char *author,
+          const char *keywords,
+          const char *subject,
+          const char *date,
+          const char *extension,
+          bool rawOrder,
+          int firstPage = 1,
+          bool outline = 0);
 
   // Destructor.
   virtual ~HtmlOutputDev();
@@ -283,7 +280,6 @@ public:
    return true;
   }
 
-
   // Start a page.
   void startPage(int pageNum, GfxState *state, XRef *xref) override;
 
@@ -297,19 +293,19 @@ public:
   void beginString(GfxState *state, const GooString *s) override;
   void endString(GfxState *state) override;
   void drawChar(GfxState *state, double x, double y,
-		double dx, double dy,
-		double originX, double originY,
-		CharCode code, int nBytes, Unicode *u, int uLen) override;
-  
-  void drawImageMask(GfxState *state, Object *ref,
-		     Stream *str,
-		     int width, int height, bool invert,
-		     bool interpolate, bool inlineImg) override;
-  void drawImage(GfxState *state, Object *ref, Stream *str,
-		 int width, int height, GfxImageColorMap *colorMap,
-		 bool interpolate, int *maskColors, bool inlineImg) override;
+                double dx, double dy,
+                double originX, double originY,
+                CharCode code, int nBytes, Unicode *u, int uLen) override;
 
-  //new feature    
+  void drawImageMask(GfxState *state, Object *ref,
+                     Stream *str,
+                     int width, int height, bool invert,
+                     bool interpolate, bool inlineImg) override;
+  void drawImage(GfxState *state, Object *ref, Stream *str,
+                 int width, int height, GfxImageColorMap *colorMap,
+                 bool interpolate, int *maskColors, bool inlineImg) override;
+
+  //new feature
   virtual int DevType() {return 1234;}
 
   int getPageWidth() { return maxPageWidth; }
@@ -336,13 +332,13 @@ private:
 
   FILE *fContentsFrame;
   FILE *page;                   // html file
-  //FILE *tin;                    // image log file
+  //FILE *tin;                  // image log file
   //bool write;
-  bool needClose;		// need to close the file?
-  HtmlPage *pages;		// text for the current page
-  bool rawOrder;		// keep text in content stream order
-  bool doOutline;		// output document outline
-  bool ok;			// set up ok?
+  bool needClose;               // need to close the file?
+  HtmlPage *pages;              // text for the current page
+  bool rawOrder;                // keep text in content stream order
+  bool doOutline;               // output document outline
+  bool ok;                      // set up ok?
   bool dumpJPEG;
   int pageNum;
   int maxPageWidth;

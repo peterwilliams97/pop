@@ -62,7 +62,7 @@ public:
   bool isValid() { return x1 != 0 || y1 != 0 || x2 != 0 || y2 != 0; }
   bool contains(double x, double y) { return x1 <= x && x <= x2 && y1 <= y && y <= y2; }
   void clipTo(PDFRectangle *rect);
-  
+
   bool operator==(const PDFRectangle &rect) const { return x1 == rect.x1 && y1 == rect.y1 && x2 == rect.x2 && y2 == rect.y2; }
 };
 
@@ -91,7 +91,7 @@ public:
   int getRotate() const { return rotate; }
   const GooString *getLastModified() const
     { return lastModified.isString()
-	? lastModified.getString() : nullptr; }
+        ? lastModified.getString() : nullptr; }
   Dict *getBoxColorInfo()
     { return boxColorInfo.isDict() ? boxColorInfo.getDict() : nullptr; }
   Dict *getGroup()
@@ -102,7 +102,7 @@ public:
     { return pieceInfo.isDict() ? pieceInfo.getDict() : nullptr; }
   Dict *getSeparationInfo()
     { return separationInfo.isDict()
-	? separationInfo.getDict() : nullptr; }
+        ? separationInfo.getDict() : nullptr; }
   Dict *getResourceDict()
     { return resources.isDict() ? resources.getDict() : nullptr; }
   Object *getResourceDictObject()
@@ -225,29 +225,29 @@ public:
   LinkAction *getAdditionalAction(PageAdditionalActionsType type);
 
   Gfx *createGfx(OutputDev *out, double hDPI, double vDPI,
-		 int rotate, bool useMediaBox, bool crop,
-		 int sliceX, int sliceY, int sliceW, int sliceH,
-		 bool printing,
-		 bool (*abortCheckCbk)(void *data),
-		 void *abortCheckCbkData, XRef *xrefA = nullptr);
+                 int rotate, bool useMediaBox, bool crop,
+                 int sliceX, int sliceY, int sliceW, int sliceH,
+                 bool printing,
+                 bool (*abortCheckCbk)(void *data),
+                 void *abortCheckCbkData, XRef *xrefA = nullptr);
 
   // Display a page.
   void display(OutputDev *out, double hDPI, double vDPI,
-	       int rotate, bool useMediaBox, bool crop,
-	       bool printing,
-	       bool (*abortCheckCbk)(void *data) = nullptr,
-	       void *abortCheckCbkData = nullptr,
+               int rotate, bool useMediaBox, bool crop,
+               bool printing,
+               bool (*abortCheckCbk)(void *data) = nullptr,
+               void *abortCheckCbkData = nullptr,
                bool (*annotDisplayDecideCbk)(Annot *annot, void *user_data) = nullptr,
                void *annotDisplayDecideCbkData = nullptr,
                bool copyXRef = false);
 
   // Display part of a page.
   void displaySlice(OutputDev *out, double hDPI, double vDPI,
-		    int rotate, bool useMediaBox, bool crop,
-		    int sliceX, int sliceY, int sliceW, int sliceH,
-		    bool printing,
-		    bool (*abortCheckCbk)(void *data) = nullptr,
-		    void *abortCheckCbkData = nullptr,
+                    int rotate, bool useMediaBox, bool crop,
+                    int sliceX, int sliceY, int sliceW, int sliceH,
+                    bool printing,
+                    bool (*abortCheckCbk)(void *data) = nullptr,
+                    void *abortCheckCbkData = nullptr,
                     bool (*annotDisplayDecideCbk)(Annot *annot, void *user_data) = nullptr,
                     void *annotDisplayDecideCbkData = nullptr,
                     bool copyXRef = false);
@@ -255,34 +255,34 @@ public:
   void display(Gfx *gfx);
 
   void makeBox(double hDPI, double vDPI, int rotate,
-	       bool useMediaBox, bool upsideDown,
-	       double sliceX, double sliceY, double sliceW, double sliceH,
-	       PDFRectangle *box, bool *crop);
+               bool useMediaBox, bool upsideDown,
+               double sliceX, double sliceY, double sliceW, double sliceH,
+               PDFRectangle *box, bool *crop);
 
   void processLinks(OutputDev *out);
 
   // Get the page's default CTM.
   void getDefaultCTM(double *ctm, double hDPI, double vDPI,
-		     int rotate, bool useMediaBox, bool upsideDown);
+                     int rotate, bool useMediaBox, bool upsideDown);
 
 private:
   // replace xref
   void replaceXRef(XRef *xrefA);
 
   PDFDoc *doc;
-  XRef *xref;			// the xref table for this PDF file
+  XRef *xref;                        // the xref table for this PDF file
   Object pageObj;               // page dictionary
   Ref pageRef;                  // page reference
-  int num;			// page number
-  PageAttrs *attrs;		// page attributes
+  int num;                        // page number
+  PageAttrs *attrs;                // page attributes
   Annots *annots;               // annotations
-  Object annotsObj;		// annotations array
-  Object contents;		// page contents
-  Object thumb;			// page thumbnail
-  Object trans;			// page transition
-  Object actions;		// page additional actions
+  Object annotsObj;                // annotations array
+  Object contents;                // page contents
+  Object thumb;                        // page thumbnail
+  Object trans;                        // page transition
+  Object actions;                // page additional actions
   double duration;              // page duration
-  bool ok;			// true if page is valid
+  bool ok;                        // true if page is valid
   mutable std::recursive_mutex mutex;
 };
 

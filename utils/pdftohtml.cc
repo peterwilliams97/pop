@@ -118,7 +118,7 @@ static const ArgDesc argDesc[] = {
   {"--help",  argFlag,     &printHelp,     0,
    "print usage information"},
   {"-p",      argFlag,     &printHtml,     0,
-   "exchange .pdf links by .html"}, 
+   "exchange .pdf links by .html"},
   {"-c",      argFlag,     &complexMode,          0,
    "generate complex document"},
   {"-s",      argFlag,     &singleHtml,          0,
@@ -138,7 +138,7 @@ static const ArgDesc argDesc[] = {
   {"-hidden", argFlag,   &showHidden,   0,
    "output hidden text"},
   {"-nomerge", argFlag, &noMerge, 0,
-   "do not merge paragraphs"},   
+   "do not merge paragraphs"},
   {"-enc",    argString,   textEncName,    sizeof(textEncName),
    "output text encoding name"},
   {"-fmt",    argString,   extension,      sizeof(extension),
@@ -154,7 +154,7 @@ static const ArgDesc argDesc[] = {
   {"-wbt",    argFP,    &wordBreakThreshold, 0,
    "word break threshold (default 10 percent)"},
   {"-fontfullname", argFlag, &fontFullName, 0,
-   "outputs font full name"},   
+   "outputs font full name"},
   {}
 };
 
@@ -166,7 +166,7 @@ public:
         bool bitmapTopDownA = true) : SplashOutputDev(colorModeA,
             bitmapRowPadA, reverseVideoA, paperColorA, bitmapTopDownA) { }
   virtual ~SplashOutputDevNoText() { }
-  
+
   void drawChar(GfxState *state, double x, double y,
       double dx, double dy,
       double originX, double originY,
@@ -210,7 +210,7 @@ int main(int argc, char *argv[]) {
     }
     exit(printHelp || printVersion ? 0 : 1);
   }
- 
+
   // init error file
   //errorInit();
 
@@ -225,7 +225,7 @@ int main(int argc, char *argv[]) {
   if (textEncName[0]) {
     globalParams->setTextEncoding(textEncName);
     if( !globalParams->getTextEncoding() )  {
-	goto error;    
+        goto error;
     }
   }
 
@@ -300,20 +300,19 @@ int main(int argc, char *argv[]) {
   } else {
     const char *p = fileName->c_str() + fileName->getLength() - 4;
     if (!strcmp(p, ".pdf") || !strcmp(p, ".PDF"))
-      htmlFileName = new GooString(fileName->c_str(),
-				 fileName->getLength() - 4);
+      htmlFileName = new GooString(fileName->c_str(), fileName->getLength() - 4);
     else
       htmlFileName = fileName->copy();
     //   htmlFileName->append(".html");
   }
-  
+
    if (scale>3.0) scale=3.0;
    if (scale<0.5) scale=0.5;
-   
+
    if (complexMode || singleHtml) {
      //noframes=false;
      stout=false;
-   } 
+   }
 
    if (stout) {
      noframes=true;
@@ -322,7 +321,7 @@ int main(int argc, char *argv[]) {
    }
 
    if (xml)
-   { 
+   {
        complexMode = true;
        singleHtml = false;
        noframes = true;
@@ -349,7 +348,7 @@ int main(int argc, char *argv[]) {
     subject = getInfoString(info.getDict(), "Subject");
     date = getInfoDate(info.getDict(), "ModDate");
     if( !date )
-	date = getInfoDate(info.getDict(), "CreationDate");
+        date = getInfoDate(info.getDict(), "CreationDate");
   }
   if( !docTitle ) docTitle = new GooString(htmlFileName);
 
@@ -360,19 +359,19 @@ int main(int argc, char *argv[]) {
 
   doOutline = doc->getOutline()->getItems() != nullptr;
   // write text file
-  htmlOut = new HtmlOutputDev(doc->getCatalog(), htmlFileName->c_str(), 
-	  docTitle->c_str(), 
-	  author ? author->c_str() : nullptr,
-	  keywords ? keywords->c_str() : nullptr, 
-          subject ? subject->c_str() : nullptr, 
-	  date ? date->c_str() : nullptr,
-	  extension,
-	  rawOrder, 
-	  firstPage,
-	  doOutline);
+  htmlOut = new HtmlOutputDev(doc->getCatalog(), htmlFileName->c_str(),
+          docTitle->c_str(),
+          author ? author->c_str() : nullptr,
+          keywords ? keywords->c_str() : nullptr,
+          subject ? subject->c_str() : nullptr,
+          date ? date->c_str() : nullptr,
+          extension,
+          rawOrder,
+          firstPage,
+          doOutline);
   delete docTitle;
   if( author )
-  {   
+  {
       delete author;
   }
   if( keywords )
@@ -391,10 +390,10 @@ int main(int argc, char *argv[]) {
   if (htmlOut->isOk())
   {
     doc->displayPages(htmlOut, firstPage, lastPage, 72 * scale, 72 * scale, 0,
-		      true, false, false);
+                      true, false, false);
     htmlOut->dumpDocOutline(doc);
   }
-  
+
   if ((complexMode || singleHtml) && !xml && !ignore) {
 #ifdef HAVE_SPLASH
     GooString *imgFileName = nullptr;
@@ -414,7 +413,7 @@ int main(int argc, char *argv[]) {
                        0, true, false, false);
       SplashBitmap *bitmap = splashOut->getBitmap();
 
-      imgFileName = GooString::format("{0:s}{1:03d}.{2:s}", 
+      imgFileName = GooString::format("{0:s}{1:03d}.{2:s}",
           htmlFileName->c_str(), pg, extension);
 
       bitmap->writeImgFile(format, imgFileName->c_str(),
@@ -434,7 +433,7 @@ int main(int argc, char *argv[]) {
     return -1;
 #endif
   }
-  
+
   delete htmlOut;
 
   exit_status = EXIT_SUCCESS;

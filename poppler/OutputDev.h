@@ -117,7 +117,7 @@ public:
   // Does this device require incCharCount to be called for text on
   // non-shown layers?
   virtual bool needCharCount() { return false; }
-  
+
   // Does this device need to clip pages to the crop box even when the
   // box is the crop box?
   virtual bool needClipToCropBox() { return false; }
@@ -132,13 +132,13 @@ public:
   // OutputDev will use some alternate means to display the page
   // before returning false.
   virtual bool checkPageSlice(Page *page, double hDPI, double vDPI,
-			       int rotate, bool useMediaBox, bool crop,
-			       int sliceX, int sliceY, int sliceW, int sliceH,
-			       bool printing,
-			       bool (* abortCheckCbk)(void *data) = nullptr,
-			       void * abortCheckCbkData = nullptr,
-			       bool (*annotDisplayDecideCbk)(Annot *annot, void *user_data) = nullptr,
-			       void *annotDisplayDecideCbkData = nullptr)
+                               int rotate, bool useMediaBox, bool crop,
+                               int sliceX, int sliceY, int sliceW, int sliceH,
+                               bool printing,
+                               bool (* abortCheckCbk)(void *data) = nullptr,
+                               void * abortCheckCbkData = nullptr,
+                               bool (*annotDisplayDecideCbk)(Annot *annot, void *user_data) = nullptr,
+                               void *annotDisplayDecideCbkData = nullptr)
     { return true; }
 
   // Start a page.
@@ -172,7 +172,7 @@ public:
   // contains the correct new CTM, so one may as well replace the
   // CTM of the renderer with that.
   virtual void updateCTM(GfxState * /*state*/, double /*m11*/, double /*m12*/,
-			 double /*m21*/, double /*m22*/, double /*m31*/, double /*m32*/) {}
+                         double /*m21*/, double /*m22*/, double /*m31*/, double /*m32*/) {}
   virtual void updateLineDash(GfxState * /*state*/) {}
   virtual void updateFlatness(GfxState * /*state*/) {}
   virtual void updateLineJoin(GfxState * /*state*/) {}
@@ -215,13 +215,13 @@ public:
   virtual void fill(GfxState * /*state*/) {}
   virtual void eoFill(GfxState * /*state*/) {}
   virtual bool tilingPatternFill(GfxState * /*state*/, Gfx * /*gfx*/, Catalog * /*cat*/, Object * /*str*/,
-				  const double * /*pmat*/, int /*paintType*/, int /*tilingType*/, Dict * /*resDict*/,
-				  const double * /*mat*/, const double * /*bbox*/,
-				  int /*x0*/, int /*y0*/, int /*x1*/, int /*y1*/,
-				  double /*xStep*/, double /*yStep*/)
+                                  const double * /*pmat*/, int /*paintType*/, int /*tilingType*/, Dict * /*resDict*/,
+                                  const double * /*mat*/, const double * /*bbox*/,
+                                  int /*x0*/, int /*y0*/, int /*x1*/, int /*y1*/,
+                                  double /*xStep*/, double /*yStep*/)
     { return false; }
   virtual bool functionShadedFill(GfxState * /*state*/,
-				   GfxFunctionShading * /*shading*/)
+                                   GfxFunctionShading * /*shading*/)
     { return false; }
   virtual bool axialShadedFill(GfxState * /*state*/, GfxAxialShading * /*shading*/, double /*tMin*/, double /*tMax*/)
     { return false; }
@@ -269,13 +269,13 @@ public:
   // int uLen: The number of unicode entries in u.  Usually '1', for a single character,
   //           but it may also have larger values, for example for ligatures.
   virtual void drawChar(GfxState * /*state*/, double /*x*/, double /*y*/,
-			double /*dx*/, double /*dy*/,
-			double /*originX*/, double /*originY*/,
-			CharCode /*code*/, int /*nBytes*/, Unicode * /*u*/, int /*uLen*/) {}
+                        double /*dx*/, double /*dy*/,
+                        double /*originX*/, double /*originY*/,
+                        CharCode /*code*/, int /*nBytes*/, Unicode * /*u*/, int /*uLen*/) {}
   virtual void drawString(GfxState * /*state*/, const GooString * /*s*/) {}
   virtual bool beginType3Char(GfxState * /*state*/, double /*x*/, double /*y*/,
-			       double /*dx*/, double /*dy*/,
-			       CharCode /*code*/, Unicode * /*u*/, int /*uLen*/);
+                               double /*dx*/, double /*dy*/,
+                               CharCode /*code*/, Unicode * /*u*/, int /*uLen*/);
   virtual void endType3Char(GfxState * /*state*/) {}
   virtual void beginTextObject(GfxState * /*state*/) {}
   virtual void endTextObject(GfxState * /*state*/) {}
@@ -290,29 +290,29 @@ public:
   // If 'invert' is false, a sample value of 0 marks the page with the current color,
   // and a 1 leaves the previous contents unchanged. If 'invert' is true, these meanings are reversed.
   virtual void drawImageMask(GfxState *state, Object *ref, Stream *str,
-			     int width, int height, bool invert, bool interpolate,
-			     bool inlineImg);
+                             int width, int height, bool invert, bool interpolate,
+                             bool inlineImg);
   virtual void setSoftMaskFromImageMask(GfxState *state,
-					Object *ref, Stream *str,
-					int width, int height, bool invert,
-					bool inlineImg, double *baseMatrix);
+                                        Object *ref, Stream *str,
+                                        int width, int height, bool invert,
+                                        bool inlineImg, double *baseMatrix);
   virtual void unsetSoftMaskFromImageMask(GfxState *state, double *baseMatrix);
   virtual void drawImage(GfxState *state, Object *ref, Stream *str,
-			 int width, int height, GfxImageColorMap *colorMap,
-			 bool interpolate, int *maskColors, bool inlineImg);
+                         int width, int height, GfxImageColorMap *colorMap,
+                         bool interpolate, int *maskColors, bool inlineImg);
   virtual void drawMaskedImage(GfxState *state, Object *ref, Stream *str,
-			       int width, int height,
-			       GfxImageColorMap *colorMap, bool interpolate,
-			       Stream *maskStr, int maskWidth, int maskHeight,
-			       bool maskInvert, bool maskInterpolate);
+                               int width, int height,
+                               GfxImageColorMap *colorMap, bool interpolate,
+                               Stream *maskStr, int maskWidth, int maskHeight,
+                               bool maskInvert, bool maskInterpolate);
   virtual void drawSoftMaskedImage(GfxState *state, Object *ref, Stream *str,
-				   int width, int height,
-				   GfxImageColorMap *colorMap,
-				   bool interpolate,
-				   Stream *maskStr,
-				   int maskWidth, int maskHeight,
-				   GfxImageColorMap *maskColorMap,
-				   bool maskInterpolate);
+                                   int width, int height,
+                                   GfxImageColorMap *colorMap,
+                                   bool interpolate,
+                                   Stream *maskStr,
+                                   int maskWidth, int maskHeight,
+                                   GfxImageColorMap *maskColorMap,
+                                   bool maskInterpolate);
 
   //----- grouping operators
 
@@ -320,8 +320,6 @@ public:
   virtual void beginMarkedContent(const char *name, Dict *properties);
   virtual void markPoint(const char *name);
   virtual void markPoint(const char *name, Dict *properties);
-
-
 
 #ifdef OPI_SUPPORT
   //----- OPI functions
@@ -332,7 +330,7 @@ public:
   //----- Type 3 font operators
   virtual void type3D0(GfxState * /*state*/, double /*wx*/, double /*wy*/) {}
   virtual void type3D1(GfxState * /*state*/, double /*wx*/, double /*wy*/,
-		       double /*llx*/, double /*lly*/, double /*urx*/, double /*ury*/) {}
+                       double /*llx*/, double /*lly*/, double /*urx*/, double /*ury*/) {}
 
   //----- form XObjects
   virtual void drawForm(Ref /*id*/) {}
@@ -348,13 +346,13 @@ public:
   //----- transparency groups and soft masks
   virtual bool checkTransparencyGroup(GfxState * /*state*/, bool /*knockout*/) { return true; }
   virtual void beginTransparencyGroup(GfxState * /*state*/, const double * /*bbox*/,
-				      GfxColorSpace * /*blendingColorSpace*/,
-				      bool /*isolated*/, bool /*knockout*/,
-				      bool /*forSoftMask*/) {}
+                                      GfxColorSpace * /*blendingColorSpace*/,
+                                      bool /*isolated*/, bool /*knockout*/,
+                                      bool /*forSoftMask*/) {}
   virtual void endTransparencyGroup(GfxState * /*state*/) {}
   virtual void paintTransparencyGroup(GfxState * /*state*/, const double * /*bbox*/) {}
   virtual void setSoftMask(GfxState * /*state*/, const double * /*bbox*/, bool /*alpha*/,
-			   Function * /*transferFunc*/, GfxColor * /*backdropColor*/) {}
+                           Function * /*transferFunc*/, GfxColor * /*backdropColor*/) {}
   virtual void clearSoftMask(GfxState * /*state*/) {}
 
   //----- links
@@ -371,8 +369,8 @@ public:
 
 private:
 
-  double defCTM[6];		// default coordinate transform matrix
-  double defICTM[6];		// inverse of default CTM
+  double defCTM[6];                // default coordinate transform matrix
+  double defICTM[6];                // inverse of default CTM
   std::unique_ptr<std::unordered_map<std::string, ProfileData>> profileHash;
 
 #ifdef USE_CMS

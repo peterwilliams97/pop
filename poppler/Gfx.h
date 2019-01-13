@@ -81,15 +81,15 @@ enum GfxClipType {
 };
 
 enum TchkType {
-  tchkBool,			// boolean
-  tchkInt,			// integer
-  tchkNum,			// number (integer or real)
-  tchkString,			// string
-  tchkName,			// name
-  tchkArray,			// array
-  tchkProps,			// properties (dictionary or name)
-  tchkSCN,			// scn/SCN args (number of name)
-  tchkNone			// used to avoid empty initializer lists
+  tchkBool,                        // boolean
+  tchkInt,                        // integer
+  tchkNum,                        // number (integer or real)
+  tchkString,                        // string
+  tchkName,                        // name
+  tchkArray,                        // array
+  tchkProps,                        // properties (dictionary or name)
+  tchkSCN,                        // scn/SCN args (number of name)
+  tchkNone                        // used to avoid empty initializer lists
 };
 
 #define maxArgs 33
@@ -175,7 +175,7 @@ public:
   // Display an annotation, given its appearance (a Form XObject),
   // border style, and bounding box (in default user space).
   void drawAnnot(Object *str, AnnotBorder *border, AnnotColor *aColor,
-		 double xMin, double yMin, double xMax, double yMax, int rotate);
+                 double xMin, double yMin, double xMax, double yMax, int rotate);
 
   // Save graphics state.
   void saveState();
@@ -195,11 +195,11 @@ public:
   bool checkTransparencyGroup(Dict *resDict);
 
   void drawForm(Object *str, Dict *resDict, const double *matrix, const double *bbox,
-	       bool transpGroup = false, bool softMask = false,
-	       GfxColorSpace *blendingColorSpace = nullptr,
-	       bool isolated = false, bool knockout = false,
-	       bool alpha = false, Function *transferFunc = nullptr,
-	       GfxColor *backdropColor = nullptr);
+               bool transpGroup = false, bool softMask = false,
+               GfxColorSpace *blendingColorSpace = nullptr,
+               bool isolated = false, bool knockout = false,
+               bool alpha = false, Function *transferFunc = nullptr,
+               GfxColor *backdropColor = nullptr);
 
   void pushResources(Dict *resDict);
   void popResources();
@@ -207,40 +207,40 @@ public:
 private:
 
   PDFDoc *doc;
-  XRef *xref;			// the xref table for this PDF file
-  Catalog *catalog;		// the Catalog for this PDF file  
-  OutputDev *out;		// output device
-  bool subPage;		// is this a sub-page object?
-  bool printCommands;		// print the drawing commands (for debugging)
-  bool profileCommands;	// profile the drawing commands (for debugging)
+  XRef *xref;                        // the xref table for this PDF file
+  Catalog *catalog;                // the Catalog for this PDF file
+  OutputDev *out;                // output device
+  bool subPage;                // is this a sub-page object?
+  bool printCommands;                // print the drawing commands (for debugging)
+  bool profileCommands;        // profile the drawing commands (for debugging)
   bool commandAborted;         // did the previous command abort the drawing?
-  GfxResources *res;		// resource stack
+  GfxResources *res;                // resource stack
   int updateLevel;
 
-  GfxState *state;		// current graphics state
-  int stackHeight;		// the height of the current graphics stack
+  GfxState *state;                // current graphics state
+  int stackHeight;                // the height of the current graphics stack
   std::vector<int> stateGuards;   // a stack of state limits; to guard against unmatched pops
-  bool fontChanged;		// set if font or text matrix has changed
-  GfxClipType clip;		// do a clip?
-  int ignoreUndef;		// current BX/EX nesting level
-  double baseMatrix[6];		// default matrix for most recent
-				//   page/form/pattern
+  bool fontChanged;                // set if font or text matrix has changed
+  GfxClipType clip;                // do a clip?
+  int ignoreUndef;                // current BX/EX nesting level
+  double baseMatrix[6];                // default matrix for most recent
+                                //   page/form/pattern
   int formDepth;
-  bool ocState;		// true if drawing is enabled, false if
-				//   disabled
+  bool ocState;                // true if drawing is enabled, false if
+                                //   disabled
 
-  MarkedContentStack *mcStack;	// current BMC/EMC stack
+  MarkedContentStack *mcStack;        // current BMC/EMC stack
 
-  Parser *parser;		// parser for page content stream(s)
-  
-  std::set<int> formsDrawing;	// the forms/patterns that are being drawn
-  std::set<int> charProcDrawing;	// the charProc that are being drawn
+  Parser *parser;                // parser for page content stream(s)
 
-  bool				// callback to check for an abort
+  std::set<int> formsDrawing;        // the forms/patterns that are being drawn
+  std::set<int> charProcDrawing;        // the charProc that are being drawn
+
+  bool                                // callback to check for an abort
     (*abortCheckCbk)(void *data);
   void *abortCheckCbkData;
 
-  static Operator opTab[];	// table of operators
+  static Operator opTab[];        // table of operators
 
   void go(bool topLevel);
   void execOp(Object *cmd, Object args[], int numArgs);
@@ -262,9 +262,9 @@ private:
   void opSetLineWidth(Object args[], int numArgs);
   void opSetExtGState(Object args[], int numArgs);
   void doSoftMask(Object *str, bool alpha,
-		  GfxColorSpace *blendingColorSpace,
-		  bool isolated, bool knockout,
-		  Function *transferFunc, GfxColor *backdropColor);
+                  GfxColorSpace *blendingColorSpace,
+                  bool isolated, bool knockout,
+                  Function *transferFunc, GfxColor *backdropColor);
   void opSetRenderingIntent(Object args[], int numArgs);
 
   // color operators
@@ -304,28 +304,28 @@ private:
   void doPatternStroke();
   void doPatternText();
   void doPatternImageMask(Object *ref, Stream *str, int width, int height,
-			  bool invert, bool inlineImg);
+                          bool invert, bool inlineImg);
   void doTilingPatternFill(GfxTilingPattern *tPat,
-			   bool stroke, bool eoFill, bool text);
+                           bool stroke, bool eoFill, bool text);
   void doShadingPatternFill(GfxShadingPattern *sPat,
-			    bool stroke, bool eoFill, bool text);
+                            bool stroke, bool eoFill, bool text);
   void opShFill(Object args[], int numArgs);
   void doFunctionShFill(GfxFunctionShading *shading);
   void doFunctionShFill1(GfxFunctionShading *shading,
-			 double x0, double y0,
-			 double x1, double y1,
-			 GfxColor *colors, int depth);
+                         double x0, double y0,
+                         double x1, double y1,
+                         GfxColor *colors, int depth);
   void doAxialShFill(GfxAxialShading *shading);
   void doRadialShFill(GfxRadialShading *shading);
   void doGouraudTriangleShFill(GfxGouraudTriangleShading *shading);
   void gouraudFillTriangle(double x0, double y0, GfxColor *color0,
-			   double x1, double y1, GfxColor *color1,
-			   double x2, double y2, GfxColor *color2,
-			   int nComps, int depth, GfxState::ReusablePathIterator *path);
+                           double x1, double y1, GfxColor *color1,
+                           double x2, double y2, GfxColor *color2,
+                           int nComps, int depth, GfxState::ReusablePathIterator *path);
   void gouraudFillTriangle(double x0, double y0, double color0,
-			   double x1, double y1, double color1,
-			   double x2, double y2, double color2,
-			   double refineColorThreshold, int depth, GfxGouraudTriangleShading *shading, GfxState::ReusablePathIterator *path);
+                           double x1, double y1, double color1,
+                           double x2, double y2, double color2,
+                           double refineColorThreshold, int depth, GfxGouraudTriangleShading *shading, GfxState::ReusablePathIterator *path);
   void doPatchMeshShFill(GfxPatchMeshShading *shading);
   void fillPatch(const GfxPatch *patch, int colorComps, int patchColorComps, double refineColorThreshold, int depth, const GfxPatchMeshShading *shading);
   void doEndPath();

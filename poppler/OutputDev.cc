@@ -94,14 +94,14 @@ void OutputDev::updateAll(GfxState *state) {
 }
 
 bool OutputDev::beginType3Char(GfxState *state, double x, double y,
-				double dx, double dy,
-				CharCode code, Unicode *u, int uLen) {
+                                double dx, double dy,
+                                CharCode code, Unicode *u, int uLen) {
   return false;
 }
 
 void OutputDev::drawImageMask(GfxState *state, Object *ref, Stream *str,
-			      int width, int height, bool invert,
-			      bool interpolate, bool inlineImg) {
+                              int width, int height, bool invert,
+                              bool interpolate, bool inlineImg) {
   int i, j;
 
   if (inlineImg) {
@@ -114,9 +114,9 @@ void OutputDev::drawImageMask(GfxState *state, Object *ref, Stream *str,
 }
 
 void OutputDev::setSoftMaskFromImageMask(GfxState *state,
-					 Object *ref, Stream *str,
-					 int width, int height, bool invert,
-					 bool inlineImg, double *baseMatrix) {
+                                         Object *ref, Stream *str,
+                                         int width, int height, bool invert,
+                                         bool inlineImg, double *baseMatrix) {
   drawImageMask(state, ref, str, width, height, invert, false, inlineImg);
 }
 
@@ -125,14 +125,14 @@ void OutputDev::unsetSoftMaskFromImageMask(GfxState *state, double *baseMatrix) 
 }
 
 void OutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
-			  int width, int height, GfxImageColorMap *colorMap,
-			  bool interpolate, int *maskColors, bool inlineImg) {
+                          int width, int height, GfxImageColorMap *colorMap,
+                          bool interpolate, int *maskColors, bool inlineImg) {
   int i, j;
 
   if (inlineImg) {
     str->reset();
     j = height * ((width * colorMap->getNumPixelComps() *
-		   colorMap->getBits() + 7) / 8);
+                   colorMap->getBits() + 7) / 8);
     for (i = 0; i < j; ++i)
       str->getChar();
     str->close();
@@ -140,24 +140,24 @@ void OutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
 }
 
 void OutputDev::drawMaskedImage(GfxState *state, Object *ref, Stream *str,
-				int width, int height,
-				GfxImageColorMap *colorMap,
-				bool interpolate,
-				Stream *maskStr,
-				int maskWidth, int maskHeight,
-				bool maskInvert,
-				bool maskInterpolate) {
+                                int width, int height,
+                                GfxImageColorMap *colorMap,
+                                bool interpolate,
+                                Stream *maskStr,
+                                int maskWidth, int maskHeight,
+                                bool maskInvert,
+                                bool maskInterpolate) {
   drawImage(state, ref, str, width, height, colorMap, interpolate, nullptr, false);
 }
 
 void OutputDev::drawSoftMaskedImage(GfxState *state, Object *ref, Stream *str,
-				    int width, int height,
-				    GfxImageColorMap *colorMap,
-				    bool interpolate,
-				    Stream *maskStr,
-				    int maskWidth, int maskHeight,
-				    GfxImageColorMap *maskColorMap,
-				    bool maskInterpolate) {
+                                    int width, int height,
+                                    GfxImageColorMap *colorMap,
+                                    bool interpolate,
+                                    Stream *maskStr,
+                                    int maskWidth, int maskHeight,
+                                    GfxImageColorMap *maskColorMap,
+                                    bool maskInterpolate) {
   drawImage(state, ref, str, width, height, colorMap, interpolate, nullptr, false);
 }
 

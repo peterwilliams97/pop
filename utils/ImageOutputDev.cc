@@ -72,7 +72,6 @@ ImageOutputDev::ImageOutputDev(char *fileRootA, bool pageNamesA, bool listImages
   }
 }
 
-
 ImageOutputDev::~ImageOutputDev() {
   if (!listImages) {
     gfree(fileName);
@@ -117,10 +116,10 @@ static void printNumber(double d)
 }
 
 void ImageOutputDev::listImage(GfxState *state, Object *ref, Stream *str,
-			       int width, int height,
-			       GfxImageColorMap *colorMap,
-			       bool interpolate, bool inlineImg,
-			       ImageType imageType) {
+                               int width, int height,
+                               GfxImageColorMap *colorMap,
+                               bool interpolate, bool inlineImg,
+                               ImageType imageType) {
   const char *type;
   const char *colorspace;
   const char *enc;
@@ -423,27 +422,27 @@ void ImageOutputDev::writeImageFile(ImgWriter *writer, ImageFormat format, const
         }
       }
       if (writer)
-	writer->writeRow(&row);
+        writer->writeRow(&row);
       break;
 
     case imgRGB48: {
       p = imgStr->getLine();
       unsigned short *rowp16 = (unsigned short*)row;
       for (int x = 0; x < width; ++x) {
-	if (p) {
-	  colorMap->getRGB(p, &rgb);
-	  *rowp16++ = colToShort(rgb.r);
-	  *rowp16++ = colToShort(rgb.g);
-	  *rowp16++ = colToShort(rgb.b);
-	  p += colorMap->getNumPixelComps();
-	} else {
-	  *rowp16++ = 0;
-	    *rowp16++ = 0;
-	    *rowp16++ = 0;
-	}
+        if (p) {
+          colorMap->getRGB(p, &rgb);
+          *rowp16++ = colToShort(rgb.r);
+          *rowp16++ = colToShort(rgb.g);
+          *rowp16++ = colToShort(rgb.b);
+          p += colorMap->getNumPixelComps();
+        } else {
+          *rowp16++ = 0;
+            *rowp16++ = 0;
+            *rowp16++ = 0;
+        }
       }
       if (writer)
-	writer->writeRow(&row);
+        writer->writeRow(&row);
       break;
     }
 
@@ -466,7 +465,7 @@ void ImageOutputDev::writeImageFile(ImgWriter *writer, ImageFormat format, const
         }
       }
       if (writer)
-	writer->writeRow(&row);
+        writer->writeRow(&row);
       break;
 
     case imgGray:
@@ -482,7 +481,7 @@ void ImageOutputDev::writeImageFile(ImgWriter *writer, ImageFormat format, const
         }
       }
       if (writer)
-	writer->writeRow(&row);
+        writer->writeRow(&row);
       break;
 
     case imgMonochrome:
@@ -490,7 +489,7 @@ void ImageOutputDev::writeImageFile(ImgWriter *writer, ImageFormat format, const
       for (int x = 0; x < size; x++)
         row[x] = str->getChar() ^ invert_bits;
       if (writer)
-	writer->writeRow(&row);
+        writer->writeRow(&row);
       break;
     }
   }
@@ -508,8 +507,8 @@ void ImageOutputDev::writeImageFile(ImgWriter *writer, ImageFormat format, const
 }
 
 void ImageOutputDev::writeImage(GfxState *state, Object *ref, Stream *str,
-				int width, int height,
-				GfxImageColorMap *colorMap, bool inlineImg) {
+                                int width, int height,
+                                GfxImageColorMap *colorMap, bool inlineImg) {
   ImageFormat format;
   EmbedStream *embedStr;
 
@@ -605,9 +604,9 @@ void ImageOutputDev::writeImage(GfxState *state, Object *ref, Stream *str,
       writer = new PNGWriter(PNGWriter::GRAY);
       format = imgGray;
     } else if ((colorMap->getColorSpace()->getMode() == csDeviceRGB ||
-		colorMap->getColorSpace()->getMode() == csCalRGB ||
-		(colorMap->getColorSpace()->getMode() == csICCBased && colorMap->getNumPixelComps() == 3)) &&
-	       colorMap->getBits() > 8) {
+                colorMap->getColorSpace()->getMode() == csCalRGB ||
+                (colorMap->getColorSpace()->getMode() == csICCBased && colorMap->getNumPixelComps() == 3)) &&
+               colorMap->getBits() > 8) {
       writer = new PNGWriter(PNGWriter::RGB48);
       format = imgRGB48;
     } else {
@@ -637,9 +636,9 @@ void ImageOutputDev::writeImage(GfxState *state, Object *ref, Stream *str,
       writer = new TiffWriter(TiffWriter::CMYK);
       format = imgCMYK;
     } else if ((colorMap->getColorSpace()->getMode() == csDeviceRGB ||
-		colorMap->getColorSpace()->getMode() == csCalRGB ||
-		(colorMap->getColorSpace()->getMode() == csICCBased && colorMap->getNumPixelComps() == 3)) &&
-	       colorMap->getBits() > 8) {
+                colorMap->getColorSpace()->getMode() == csCalRGB ||
+                (colorMap->getColorSpace()->getMode() == csICCBased && colorMap->getNumPixelComps() == 3)) &&
+               colorMap->getBits() > 8) {
       writer = new TiffWriter(TiffWriter::RGB48);
       format = imgRGB48;
     } else {
@@ -675,17 +674,17 @@ void ImageOutputDev::writeImage(GfxState *state, Object *ref, Stream *str,
 }
 
 bool ImageOutputDev::tilingPatternFill(GfxState *state, Gfx *gfx, Catalog *cat, Object *str,
-				  const double *pmat, int paintType, int tilingType, Dict *resDict,
-				  const double *mat, const double *bbox,
-				  int x0, int y0, int x1, int y1,
-				  double xStep, double yStep) {
+                                  const double *pmat, int paintType, int tilingType, Dict *resDict,
+                                  const double *mat, const double *bbox,
+                                  int x0, int y0, int x1, int y1,
+                                  double xStep, double yStep) {
   return true;
   // do nothing -- this avoids the potentially slow loop in Gfx.cc
 }
 
 void ImageOutputDev::drawImageMask(GfxState *state, Object *ref, Stream *str,
-				   int width, int height, bool invert,
-				   bool interpolate, bool inlineImg) {
+                                   int width, int height, bool invert,
+                                   bool interpolate, bool inlineImg) {
   if (listImages)
     listImage(state, ref, str, width, height, nullptr, interpolate, inlineImg, imgStencil);
   else
@@ -693,9 +692,9 @@ void ImageOutputDev::drawImageMask(GfxState *state, Object *ref, Stream *str,
 }
 
 void ImageOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
-			       int width, int height,
-			       GfxImageColorMap *colorMap,
-			       bool interpolate, int *maskColors, bool inlineImg) {
+                               int width, int height,
+                               GfxImageColorMap *colorMap,
+                               bool interpolate, int *maskColors, bool inlineImg) {
   if (listImages)
     listImage(state, ref, str, width, height, colorMap, interpolate, inlineImg, imgImage);
   else

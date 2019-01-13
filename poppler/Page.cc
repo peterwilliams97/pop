@@ -223,10 +223,10 @@ bool PageAttrs::readBox(Dict *dict, const char *key, PDFRectangle *box) {
       ok = false;
     if (ok) {
       if (tmp.x1 > tmp.x2) {
-	t = tmp.x1; tmp.x1 = tmp.x2; tmp.x2 = t;
+        t = tmp.x1; tmp.x1 = tmp.x2; tmp.x2 = t;
       }
       if (tmp.y1 > tmp.y2) {
-	t = tmp.y1; tmp.y1 = tmp.y2; tmp.y2 = t;
+        t = tmp.y1; tmp.y1 = tmp.y2; tmp.y2 = t;
       }
       *box = tmp;
     }
@@ -261,7 +261,7 @@ Page::Page(PDFDoc *docA, int numA, Object &&pageDict, Ref pageRefA, PageAttrs *a
   trans = pageObj.dictLookupNF("Trans");
   if (!(trans.isRef() || trans.isDict() || trans.isNull())) {
     error(errSyntaxError, -1, "Page transition object (page {0:d}) is wrong type ({1:s})",
-	  num, trans.getTypeName());
+          num, trans.getTypeName());
     trans = Object();
   }
 
@@ -269,7 +269,7 @@ Page::Page(PDFDoc *docA, int numA, Object &&pageDict, Ref pageRefA, PageAttrs *a
   Object tmp = pageObj.dictLookupNF("Dur");
   if (!(tmp.isNum() || tmp.isNull())) {
     error(errSyntaxError, -1, "Page duration object (page {0:d}) is wrong type ({1:s})",
-	  num, tmp.getTypeName());
+          num, tmp.getTypeName());
   } else if (tmp.isNum()) {
     duration = tmp.getNum();
   }
@@ -278,16 +278,16 @@ Page::Page(PDFDoc *docA, int numA, Object &&pageDict, Ref pageRefA, PageAttrs *a
   annotsObj = pageObj.dictLookupNF("Annots");
   if (!(annotsObj.isRef() || annotsObj.isArray() || annotsObj.isNull())) {
     error(errSyntaxError, -1, "Page annotations object (page {0:d}) is wrong type ({1:s})",
-	  num, annotsObj.getTypeName());
+          num, annotsObj.getTypeName());
     goto err2;
   }
 
   // contents
   contents = pageObj.dictLookupNF("Contents");
   if (!(contents.isRef() || contents.isArray() ||
-	contents.isNull())) {
+        contents.isNull())) {
     error(errSyntaxError, -1, "Page contents object (page {0:d}) is wrong type ({1:s})",
-	  num, contents.getTypeName());
+          num, contents.getTypeName());
     goto err1;
   }
 
@@ -306,7 +306,7 @@ Page::Page(PDFDoc *docA, int numA, Object &&pageDict, Ref pageRefA, PageAttrs *a
             num, actions.getTypeName());
       actions.setToNull();
   }
-  
+
   return;
 
  err2:
@@ -321,7 +321,7 @@ Page::~Page() {
   delete annots;
 }
 
-Dict *Page::getResourceDict() { 
+Dict *Page::getResourceDict() {
   return attrs->getResourceDict();
 }
 
@@ -330,7 +330,7 @@ Object *Page::getResourceDictObject()
   return attrs->getResourceDictObject();
 }
 
-Dict *Page::getResourceDictCopy(XRef *xrefA) { 
+Dict *Page::getResourceDictCopy(XRef *xrefA) {
   pageLocker();
   Dict *dict = attrs->getResourceDict();
   return dict ? dict->copy(xrefA) : nullptr;
@@ -459,24 +459,24 @@ FormPageWidgets *Page::getFormWidgets() {
 }
 
 void Page::display(OutputDev *out, double hDPI, double vDPI,
-		   int rotate, bool useMediaBox, bool crop,
-		   bool printing,
-		   bool (*abortCheckCbk)(void *data),
-		   void *abortCheckCbkData,
+                   int rotate, bool useMediaBox, bool crop,
+                   bool printing,
+                   bool (*abortCheckCbk)(void *data),
+                   void *abortCheckCbkData,
                    bool (*annotDisplayDecideCbk)(Annot *annot, void *user_data),
                    void *annotDisplayDecideCbkData,
                    bool copyXRef) {
   displaySlice(out, hDPI, vDPI, rotate, useMediaBox, crop, -1, -1, -1, -1, printing,
-	       abortCheckCbk, abortCheckCbkData,
+               abortCheckCbk, abortCheckCbkData,
                annotDisplayDecideCbk, annotDisplayDecideCbkData, copyXRef);
 }
 
 Gfx *Page::createGfx(OutputDev *out, double hDPI, double vDPI,
-		     int rotate, bool useMediaBox, bool crop,
-		     int sliceX, int sliceY, int sliceW, int sliceH,
-		     bool printing,
-		     bool (*abortCheckCbk)(void *data),
-		     void *abortCheckCbkData, XRef *xrefA) {
+                     int rotate, bool useMediaBox, bool crop,
+                     int sliceX, int sliceY, int sliceW, int sliceH,
+                     bool printing,
+                     bool (*abortCheckCbk)(void *data),
+                     void *abortCheckCbkData, XRef *xrefA) {
   const PDFRectangle *mediaBox, *cropBox;
   PDFRectangle box;
   Gfx *gfx;
@@ -489,15 +489,15 @@ Gfx *Page::createGfx(OutputDev *out, double hDPI, double vDPI,
   }
 
   makeBox(hDPI, vDPI, rotate, useMediaBox, out->upsideDown(),
-	  sliceX, sliceY, sliceW, sliceH, &box, &crop);
+          sliceX, sliceY, sliceW, sliceH, &box, &crop);
   cropBox = getCropBox();
   mediaBox = getMediaBox();
 
   if (globalParams->getPrintCommands()) {
     printf("***** MediaBox = ll:%g,%g ur:%g,%g\n",
-	    mediaBox->x1, mediaBox->y1, mediaBox->x2, mediaBox->y2);
+            mediaBox->x1, mediaBox->y1, mediaBox->x2, mediaBox->y2);
       printf("***** CropBox = ll:%g,%g ur:%g,%g\n",
-	     cropBox->x1, cropBox->y1, cropBox->x2, cropBox->y2);
+             cropBox->x1, cropBox->y1, cropBox->x2, cropBox->y2);
     printf("***** Rotate = %d\n", attrs->getRotate());
   }
 
@@ -505,30 +505,30 @@ Gfx *Page::createGfx(OutputDev *out, double hDPI, double vDPI,
     crop = (box == *cropBox) && out->needClipToCropBox();
   }
   gfx = new Gfx(doc, out, num, attrs->getResourceDict(),
-		hDPI, vDPI, &box, crop ? cropBox : nullptr,
-		rotate, abortCheckCbk, abortCheckCbkData, xrefA);
+                hDPI, vDPI, &box, crop ? cropBox : nullptr,
+                rotate, abortCheckCbk, abortCheckCbkData, xrefA);
 
   return gfx;
 }
 
 void Page::displaySlice(OutputDev *out, double hDPI, double vDPI,
-			int rotate, bool useMediaBox, bool crop,
-			int sliceX, int sliceY, int sliceW, int sliceH,
-			bool printing,
-			bool (*abortCheckCbk)(void *data),
-			void *abortCheckCbkData,
+                        int rotate, bool useMediaBox, bool crop,
+                        int sliceX, int sliceY, int sliceW, int sliceH,
+                        bool printing,
+                        bool (*abortCheckCbk)(void *data),
+                        void *abortCheckCbkData,
                         bool (*annotDisplayDecideCbk)(Annot *annot, void *user_data),
                         void *annotDisplayDecideCbkData,
                         bool copyXRef) {
   Gfx *gfx;
   Annots *annotList;
   int i;
-  
+
   if (!out->checkPageSlice(this, hDPI, vDPI, rotate, useMediaBox, crop,
-			   sliceX, sliceY, sliceW, sliceH,
-			   printing,
-			   abortCheckCbk, abortCheckCbkData,
-			   annotDisplayDecideCbk, annotDisplayDecideCbkData)) {
+                           sliceX, sliceY, sliceW, sliceH,
+                           printing,
+                           abortCheckCbk, abortCheckCbkData,
+                           annotDisplayDecideCbk, annotDisplayDecideCbkData)) {
     return;
   }
   pageLocker();
@@ -538,9 +538,9 @@ void Page::displaySlice(OutputDev *out, double hDPI, double vDPI,
   }
 
   gfx = createGfx(out, hDPI, vDPI, rotate, useMediaBox, crop,
-		  sliceX, sliceY, sliceW, sliceH,
-		  printing,
-		  abortCheckCbk, abortCheckCbkData, localXRef);
+                  sliceX, sliceY, sliceW, sliceH,
+                  printing,
+                  abortCheckCbk, abortCheckCbkData, localXRef);
 
   Object obj = contents.fetch(localXRef);
   if (!obj.isNull()) {
@@ -563,10 +563,10 @@ void Page::displaySlice(OutputDev *out, double hDPI, double vDPI,
     for (i = 0; i < annotList->getNumAnnots(); ++i) {
         Annot *annot = annotList->getAnnot(i);
         if ((annotDisplayDecideCbk &&
-             (*annotDisplayDecideCbk)(annot, annotDisplayDecideCbkData)) || 
+             (*annotDisplayDecideCbk)(annot, annotDisplayDecideCbkData)) ||
             !annotDisplayDecideCbk) {
              annotList->getAnnot(i)->draw(gfx, printing);
-	}
+        }
     }
     out->dump();
   }
@@ -588,8 +588,8 @@ void Page::display(Gfx *gfx) {
 }
 
 bool Page::loadThumb(unsigned char **data_out,
-		      int *width_out, int *height_out,
-		      int *rowstride_out)
+                      int *width_out, int *height_out,
+                      int *rowstride_out)
 {
   unsigned int pixbufdatasize;
   int width, height, bits;
@@ -608,15 +608,15 @@ bool Page::loadThumb(unsigned char **data_out,
   }
 
   dict = fetched_thumb.streamGetDict();
-  str = fetched_thumb.getStream(); 
-		
+  str = fetched_thumb.getStream();
+
   if (!dict->lookupInt("Width", "W", &width))
     goto fail1;
   if (!dict->lookupInt("Height", "H", &height))
     goto fail1;
   if (!dict->lookupInt("BitsPerComponent", "BPC", &bits))
     goto fail1;
-		
+
   /* Check for invalid dimensions and integer overflow. */
   if (width <= 0 || height <= 0)
     goto fail1;
@@ -650,8 +650,8 @@ bool Page::loadThumb(unsigned char **data_out,
     unsigned char *pixbufdata = (unsigned char *) gmalloc(pixbufdatasize);
     unsigned char *p = pixbufdata;
     ImageStream *imgstr = new ImageStream(str, width,
-			   colorMap->getNumPixelComps(),
-			   colorMap->getBits());
+                           colorMap->getNumPixelComps(),
+                           colorMap->getBits());
     imgstr->reset();
     for (int row = 0; row < height; ++row) {
       for (int col = 0; col < width; ++col) {
@@ -686,9 +686,9 @@ bool Page::loadThumb(unsigned char **data_out,
 }
 
 void Page::makeBox(double hDPI, double vDPI, int rotate,
-		   bool useMediaBox, bool upsideDown,
-		   double sliceX, double sliceY, double sliceW, double sliceH,
-		   PDFRectangle *box, bool *crop) {
+                   bool useMediaBox, bool upsideDown,
+                   double sliceX, double sliceY, double sliceW, double sliceH,
+                   PDFRectangle *box, bool *crop) {
   const PDFRectangle *mediaBox, *cropBox, *baseBox;
   double kx, ky;
 
@@ -700,11 +700,11 @@ void Page::makeBox(double hDPI, double vDPI, int rotate,
     ky = 72.0 / vDPI;
     if (rotate == 90) {
       if (upsideDown) {
-	box->x1 = baseBox->x1 + ky * sliceY;
-	box->x2 = baseBox->x1 + ky * (sliceY + sliceH);
+        box->x1 = baseBox->x1 + ky * sliceY;
+        box->x2 = baseBox->x1 + ky * (sliceY + sliceH);
       } else {
-	box->x1 = baseBox->x2 - ky * (sliceY + sliceH);
-	box->x2 = baseBox->x2 - ky * sliceY;
+        box->x1 = baseBox->x2 - ky * (sliceY + sliceH);
+        box->x2 = baseBox->x2 - ky * sliceY;
       }
       box->y1 = baseBox->y1 + kx * sliceX;
       box->y2 = baseBox->y1 + kx * (sliceX + sliceW);
@@ -712,19 +712,19 @@ void Page::makeBox(double hDPI, double vDPI, int rotate,
       box->x1 = baseBox->x2 - kx * (sliceX + sliceW);
       box->x2 = baseBox->x2 - kx * sliceX;
       if (upsideDown) {
-	box->y1 = baseBox->y1 + ky * sliceY;
-	box->y2 = baseBox->y1 + ky * (sliceY + sliceH);
+        box->y1 = baseBox->y1 + ky * sliceY;
+        box->y2 = baseBox->y1 + ky * (sliceY + sliceH);
       } else {
-	box->y1 = baseBox->y2 - ky * (sliceY + sliceH);
-	box->y2 = baseBox->y2 - ky * sliceY;
+        box->y1 = baseBox->y2 - ky * (sliceY + sliceH);
+        box->y2 = baseBox->y2 - ky * sliceY;
       }
     } else if (rotate == 270) {
       if (upsideDown) {
-	box->x1 = baseBox->x2 - ky * (sliceY + sliceH);
-	box->x2 = baseBox->x2 - ky * sliceY;
+        box->x1 = baseBox->x2 - ky * (sliceY + sliceH);
+        box->x2 = baseBox->x2 - ky * sliceY;
       } else {
-	box->x1 = baseBox->x1 + ky * sliceY;
-	box->x2 = baseBox->x1 + ky * (sliceY + sliceH);
+        box->x1 = baseBox->x1 + ky * sliceY;
+        box->x2 = baseBox->x1 + ky * (sliceY + sliceH);
       }
       box->y1 = baseBox->y2 - kx * (sliceX + sliceW);
       box->y2 = baseBox->y2 - kx * sliceX;
@@ -732,11 +732,11 @@ void Page::makeBox(double hDPI, double vDPI, int rotate,
       box->x1 = baseBox->x1 + kx * sliceX;
       box->x2 = baseBox->x1 + kx * (sliceX + sliceW);
       if (upsideDown) {
-	box->y1 = baseBox->y2 - ky * (sliceY + sliceH);
-	box->y2 = baseBox->y2 - ky * sliceY;
+        box->y1 = baseBox->y2 - ky * (sliceY + sliceH);
+        box->y2 = baseBox->y2 - ky * sliceY;
       } else {
-	box->y1 = baseBox->y1 + ky * sliceY;
-	box->y2 = baseBox->y1 + ky * (sliceY + sliceH);
+        box->y1 = baseBox->y1 + ky * sliceY;
+        box->y2 = baseBox->y1 + ky * (sliceY + sliceH);
       }
     }
   } else if (useMediaBox) {
@@ -759,7 +759,7 @@ void Page::processLinks(OutputDev *out) {
 }
 
 void Page::getDefaultCTM(double *ctm, double hDPI, double vDPI,
-			 int rotate, bool useMediaBox, bool upsideDown) {
+                         int rotate, bool useMediaBox, bool upsideDown) {
   GfxState *state;
   int i;
   rotate += getRotate();
@@ -769,8 +769,8 @@ void Page::getDefaultCTM(double *ctm, double hDPI, double vDPI,
     rotate += 360;
   }
   state = new GfxState(hDPI, vDPI,
-		       useMediaBox ? getMediaBox() : getCropBox(),
-		       rotate, upsideDown);
+                       useMediaBox ? getMediaBox() : getCropBox(),
+                       rotate, upsideDown);
   for (i = 0; i < 6; ++i) {
     ctm[i] = state->getCTM()[i];
   }

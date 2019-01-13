@@ -99,7 +99,7 @@ GooString *HtmlFontColor::convtoX(unsigned int xcol) const{
 
 GooString *HtmlFontColor::toString() const{
   GooString *tmp=new GooString("#");
-  GooString *tmpr=convtoX(r); 
+  GooString *tmpr=convtoX(r);
   GooString *tmpg=convtoX(g);
   GooString *tmpb=convtoX(b);
   tmp->append(tmpr);
@@ -109,7 +109,7 @@ GooString *HtmlFontColor::toString() const{
   delete tmpg;
   delete tmpb;
   return tmp;
-} 
+}
 
 HtmlFont::HtmlFont(GfxFont *font, int _size, GfxRGB rgb){
   color=HtmlFontColor(rgb);
@@ -131,13 +131,13 @@ HtmlFont::HtmlFont(GfxFont *font, int _size, GfxRGB rgb){
     fontnameLower.lowerCase();
 
     if (!bold && strstr(fontnameLower.c_str(),"bold")) {
-		bold=true;
+                bold=true;
     }
 
     if (!italic &&
-	(strstr(fontnameLower.c_str(),"italic")||
-	 strstr(fontnameLower.c_str(),"oblique"))) {
-		italic=true;
+        (strstr(fontnameLower.c_str(),"italic")||
+         strstr(fontnameLower.c_str(),"oblique"))) {
+                italic=true;
     }
 
     familyName = fontname->c_str();
@@ -149,7 +149,7 @@ HtmlFont::HtmlFont(GfxFont *font, int _size, GfxRGB rgb){
 
   rotSkewMat[0] = rotSkewMat[1] = rotSkewMat[2] = rotSkewMat[3] = 0;
 }
- 
+
 HtmlFont::HtmlFont(const HtmlFont& x){
    size=x.size;
    lineSize=x.lineSize;
@@ -168,7 +168,7 @@ HtmlFont::~HtmlFont(){
 }
 
 HtmlFont& HtmlFont::operator=(const HtmlFont& x){
-   if (this==&x) return *this; 
+   if (this==&x) return *this;
    size=x.size;
    lineSize=x.lineSize;
    italic=x.italic;
@@ -186,10 +186,10 @@ HtmlFont& HtmlFont::operator=(const HtmlFont& x){
 */
 bool HtmlFont::isEqual(const HtmlFont& x) const{
   return (size==x.size) &&
-	  (lineSize==x.lineSize) &&
-	  (FontName->cmp(x.FontName) == 0) && (bold==x.bold) && (italic==x.italic) &&
-	  (color.isEqual(x.getColor())) && isRotOrSkewed() == x.isRotOrSkewed() &&
-	  (!isRotOrSkewed() || rot_matrices_equal(getRotMat(), x.getRotMat()));
+          (lineSize==x.lineSize) &&
+          (FontName->cmp(x.FontName) == 0) && (bold==x.bold) && (italic==x.italic) &&
+          (color.isEqual(x.getColor())) && isRotOrSkewed() == x.isRotOrSkewed() &&
+          (!isRotOrSkewed() || rot_matrices_equal(getRotMat(), x.getRotMat()));
 }
 
 /*
@@ -198,8 +198,8 @@ bool HtmlFont::isEqual(const HtmlFont& x) const{
 */
 bool HtmlFont::isEqualIgnoreBold(const HtmlFont& x) const{
   return ((size==x.size) &&
-	  (familyName == x.familyName) &&
-	  (color.isEqual(x.getColor())));
+          (familyName == x.familyName) &&
+          (color.isEqual(x.getColor())));
 }
 
 GooString* HtmlFont::getFontName(){
@@ -229,19 +229,19 @@ GooString* HtmlFont::HtmlFilter(const Unicode* u, int uLen) {
       continue;
 
     switch (u[i])
-      { 
-	case '"': tmp->append("&#34;");  break;
-	case '&': tmp->append("&amp;");  break;
-	case '<': tmp->append("&lt;");  break;
-	case '>': tmp->append("&gt;");  break;
-	case ' ': case '\t': tmp->append( !xml && ( i+1 >= uLen || !tmp->getLength() || tmp->getChar( tmp->getLength()-1 ) == ' ' ) ? "&#160;" : " " );
-	          break;
-	default:  
-	  {
-	    // convert unicode to string
-	    if ((n = uMap->mapUnicode(u[i], buf, sizeof(buf))) > 0) {
-	      tmp->append(buf, n); 
-	  }
+      {
+        case '"': tmp->append("&#34;");  break;
+        case '&': tmp->append("&amp;");  break;
+        case '<': tmp->append("&lt;");  break;
+        case '>': tmp->append("&gt;");  break;
+        case ' ': case '\t': tmp->append( !xml && ( i+1 >= uLen || !tmp->getLength() || tmp->getChar( tmp->getLength()-1 ) == ' ' ) ? "&#160;" : " " );
+                  break;
+        default:
+          {
+            // convert unicode to string
+            if ((n = uMap->mapUnicode(u[i], buf, sizeof(buf))) > 0) {
+              tmp->append(buf, n);
+          }
       }
     }
   }
@@ -259,20 +259,20 @@ HtmlFontAccu::~HtmlFontAccu(){
 }
 
 int HtmlFontAccu::AddFont(const HtmlFont& font){
- std::vector<HtmlFont>::iterator i; 
+ std::vector<HtmlFont>::iterator i;
  for (i=accu->begin();i!=accu->end();++i)
  {
-	if (font.isEqual(*i)) 
-	{
-		return (int)(i-(accu->begin()));
-	}
+        if (font.isEqual(*i))
+        {
+                return (int)(i-(accu->begin()));
+        }
  }
 
  accu->push_back(font);
  return (accu->size()-1);
 }
 
-// get CSS font definition for font #i 
+// get CSS font definition for font #i
 GooString* HtmlFontAccu::CSStyle(int i, int j){
    GooString *tmp=new GooString();
    GooString *iStr=GooString::fromInt(i);
@@ -285,7 +285,7 @@ GooString* HtmlFontAccu::CSStyle(int i, int j){
    GooString *colorStr=font.getColor().toString();
    GooString *fontName=(fontFullName ? font.getFullName() : font.getFontName());
    GooString *lSize;
-   
+
    if(!xml){
      tmp->append(".ft");
      tmp->append(jStr);
@@ -294,10 +294,10 @@ GooString* HtmlFontAccu::CSStyle(int i, int j){
      tmp->append(Size);
      if( font.getLineSize() != -1 && font.getLineSize() != 0 )
      {
-	 lSize = GooString::fromInt(font.getLineSize());
-	 tmp->append("px;line-height:");
-	 tmp->append(lSize);
-	 delete lSize;
+         lSize = GooString::fromInt(font.getLineSize());
+         tmp->append("px;line-height:");
+         tmp->append(lSize);
+         delete lSize;
      }
      tmp->append("px;font-family:");
      tmp->append(fontName); //font.getFontName());
@@ -305,26 +305,26 @@ GooString* HtmlFontAccu::CSStyle(int i, int j){
      tmp->append(colorStr);
      // if there is rotation or skew, include the matrix
      if (font.isRotOrSkewed()) {
-    	 const double * const text_mat = font.getRotMat();
-    	 GooString matrix_str(" matrix(");
-    	 matrix_str.appendf("{0:10.10g}, {1:10.10g}, {2:10.10g}, {3:10.10g}, 0, 0)",
-    			 text_mat[0], text_mat[1], text_mat[2], text_mat[3]);
-    	 tmp->append(";-moz-transform:");
-    	 tmp->append(&matrix_str);
-    	 tmp->append(";-webkit-transform:");
-    	 tmp->append(&matrix_str);
-    	 tmp->append(";-o-transform:");
-    	 tmp->append(&matrix_str);
-    	 tmp->append(";-ms-transform:");
-    	 tmp->append(&matrix_str);
-    	 // Todo: 75% is a wild guess that seems to work pretty well;
-    	 // We probably need to calculate the real percentage
-    	 // Based on the characteristic baseline and bounding box of current font
-    	 // PDF origin is at baseline
-    	 tmp->append(";-moz-transform-origin: left 75%");
-    	 tmp->append(";-webkit-transform-origin: left 75%");
-    	 tmp->append(";-o-transform-origin: left 75%");
-    	 tmp->append(";-ms-transform-origin: left 75%");
+             const double * const text_mat = font.getRotMat();
+             GooString matrix_str(" matrix(");
+             matrix_str.appendf("{0:10.10g}, {1:10.10g}, {2:10.10g}, {3:10.10g}, 0, 0)",
+                             text_mat[0], text_mat[1], text_mat[2], text_mat[3]);
+             tmp->append(";-moz-transform:");
+             tmp->append(&matrix_str);
+             tmp->append(";-webkit-transform:");
+             tmp->append(&matrix_str);
+             tmp->append(";-o-transform:");
+             tmp->append(&matrix_str);
+             tmp->append(";-ms-transform:");
+             tmp->append(&matrix_str);
+             // Todo: 75% is a wild guess that seems to work pretty well;
+             // We probably need to calculate the real percentage
+             // Based on the characteristic baseline and bounding box of current font
+             // PDF origin is at baseline
+             tmp->append(";-moz-transform-origin: left 75%");
+             tmp->append(";-webkit-transform-origin: left 75%");
+             tmp->append(";-o-transform-origin: left 75%");
+             tmp->append(";-ms-transform-origin: left 75%");
      }
      tmp->append(";}");
    }
@@ -347,5 +347,3 @@ GooString* HtmlFontAccu::CSStyle(int i, int j){
    delete Size;
    return tmp;
 }
- 
-

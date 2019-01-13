@@ -115,15 +115,15 @@ class PDFDoc {
 public:
 
   PDFDoc(const GooString *fileNameA, const GooString *ownerPassword = nullptr,
-	 const GooString *userPassword = nullptr, void *guiDataA = nullptr);
+         const GooString *userPassword = nullptr, void *guiDataA = nullptr);
 
 #ifdef _WIN32
   PDFDoc(wchar_t *fileNameA, int fileNameLen, GooString *ownerPassword = nullptr,
-	 GooString *userPassword = nullptr, void *guiDataA = nullptr);
+         GooString *userPassword = nullptr, void *guiDataA = nullptr);
 #endif
 
   PDFDoc(BaseStream *strA, const GooString *ownerPassword = nullptr,
-	 const GooString *userPassword = nullptr, void *guiDataA = nullptr);
+         const GooString *userPassword = nullptr, void *guiDataA = nullptr);
   ~PDFDoc();
 
   PDFDoc(const PDFDoc &) = delete;
@@ -137,7 +137,7 @@ public:
   // Get the error code (if isOk() returns false).
   int getErrorCode() const { return errCode; }
 
-  // Get the error code returned by fopen() (if getErrorCode() == 
+  // Get the error code returned by fopen() (if getErrorCode() ==
   // errOpenFile).
   int getFopenErrno() const { return fopenErrno; }
 
@@ -190,29 +190,29 @@ public:
 
   // Display a page.
   void displayPage(OutputDev *out, int page,
-		   double hDPI, double vDPI, int rotate,
-		   bool useMediaBox, bool crop, bool printing,
-		   bool (*abortCheckCbk)(void *data) = nullptr,
-		   void *abortCheckCbkData = nullptr,
+                   double hDPI, double vDPI, int rotate,
+                   bool useMediaBox, bool crop, bool printing,
+                   bool (*abortCheckCbk)(void *data) = nullptr,
+                   void *abortCheckCbkData = nullptr,
                    bool (*annotDisplayDecideCbk)(Annot *annot, void *user_data) = nullptr,
                    void *annotDisplayDecideCbkData = nullptr, bool copyXRef = false);
 
   // Display a range of pages.
   void displayPages(OutputDev *out, int firstPage, int lastPage,
-		    double hDPI, double vDPI, int rotate,
-		    bool useMediaBox, bool crop, bool printing,
-		    bool (*abortCheckCbk)(void *data) = nullptr,
-		    void *abortCheckCbkData = nullptr,
+                    double hDPI, double vDPI, int rotate,
+                    bool useMediaBox, bool crop, bool printing,
+                    bool (*abortCheckCbk)(void *data) = nullptr,
+                    void *abortCheckCbkData = nullptr,
                     bool (*annotDisplayDecideCbk)(Annot *annot, void *user_data) = nullptr,
                     void *annotDisplayDecideCbkData = nullptr);
 
   // Display part of a page.
   void displayPageSlice(OutputDev *out, int page,
-			double hDPI, double vDPI, int rotate, 
-			bool useMediaBox, bool crop, bool printing,
-			int sliceX, int sliceY, int sliceW, int sliceH,
-			bool (*abortCheckCbk)(void *data) = nullptr,
-			void *abortCheckCbkData = nullptr,
+                        double hDPI, double vDPI, int rotate,
+                        bool useMediaBox, bool crop, bool printing,
+                        int sliceX, int sliceY, int sliceW, int sliceH,
+                        bool (*abortCheckCbk)(void *data) = nullptr,
+                        void *abortCheckCbkData = nullptr,
                         bool (*annotDisplayDecideCbk)(Annot *annot, void *user_data) = nullptr,
                         void *annotDisplayDecideCbkData = nullptr, bool copyXRef = false);
 
@@ -419,11 +419,11 @@ private:
 
   bool ok;
   int errCode;
-  //If there is an error opening the PDF file with fopen() in the constructor, 
+  //If there is an error opening the PDF file with fopen() in the constructor,
   //then the POSIX errno will be here.
   int fopenErrno;
 
-  Goffset startXRefPos;		// offset of last xref table
+  Goffset startXRefPos;                // offset of last xref table
   mutable std::recursive_mutex mutex;
 };
 

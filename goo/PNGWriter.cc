@@ -39,6 +39,7 @@ struct PNGWriterPrivate {
 
 PNGWriter::PNGWriter(Format formatA)
 {
+  printf("PNGWriter: format=%d\n", formatA);
   priv = new PNGWriterPrivate;
   priv->format = formatA;
   priv->icc_data = nullptr;
@@ -136,12 +137,14 @@ bool PNGWriter::init(FILE *f, int width, int height, int hDPI, int vDPI)
   }
   png_byte interlace_type = PNG_INTERLACE_NONE;
 
-  png_set_IHDR(priv->png_ptr, priv->info_ptr, width, height, bit_depth, color_type, interlace_type, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+  png_set_IHDR(priv->png_ptr, priv->info_ptr, width, height, bit_depth, color_type, interlace_type,
+               PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
   png_set_pHYs(priv->png_ptr, priv->info_ptr, hDPI/0.0254, vDPI/0.0254, PNG_RESOLUTION_METER);
 
   if (priv->icc_data)
-    png_set_iCCP(priv->png_ptr, priv->info_ptr, priv->icc_name, PNG_COMPRESSION_TYPE_BASE, icc_data_ptr, priv->icc_data_size);
+    png_set_iCCP(priv->png_ptr, priv->info_ptr, priv->icc_name, PNG_COMPRESSION_TYPE_BASE,
+                 icc_data_ptr, priv->icc_data_size);
   else if (priv->sRGB_profile)
     png_set_sRGB(priv->png_ptr, priv->info_ptr, PNG_sRGB_INTENT_RELATIVE);
 

@@ -4200,6 +4200,7 @@ void Gfx::opXObject(Object args[], int numArgs) {
 #endif
 }
 
+// !@#$
 void Gfx::doImage(Object *ref, Stream *str, bool inlineImg) {
   Dict *dict, *maskDict;
   int width, height;

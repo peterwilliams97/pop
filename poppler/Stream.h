@@ -48,19 +48,19 @@ class CachedFile;
 //------------------------------------------------------------------------
 
 enum StreamKind {
-  strFile,
-  strCachedFile,
-  strASCIIHex,
-  strASCII85,
-  strLZW,
-  strRunLength,
-  strCCITTFax,
-  strDCT,
-  strFlate,
-  strJBIG2,
-  strJPX,
-  strWeird,			// internal-use stream types
-  strCrypt			// internal-use to detect decode streams
+  strFile,                 // 0
+  strCachedFile,           // 1
+  strASCIIHex,             // 2
+  strASCII85,              // 3
+  strLZW,                  // 4
+  strRunLength,            // 5
+  strCCITTFax,             // 6
+  strDCT,                  // 7
+  strFlate,                // 8
+  strJBIG2,                // 9
+  strJPX,                  // 10
+  strWeird,                // internal-use stream types
+  strCrypt                 // internal-use to detect decode streams
 };
 
 enum StreamColorSpaceMode {
@@ -136,7 +136,7 @@ public:
       s->append((const char *)readBuf, readChars);
     }
   }
-  
+
   inline unsigned char *toUnsignedChars(int *length, int initialSize = 4096, int sizeIncrement = 4096)
   {
     int readChars;
@@ -178,7 +178,7 @@ public:
   virtual int getUnfilteredChar () = 0;
 
   // Resets the stream without reading anything (even not the headers)
-  // WARNING: Reading the stream with something else than getUnfilteredChar 
+  // WARNING: Reading the stream with something else than getUnfilteredChar
   // may lead to unexcepted behaviour until you call reset ()
   virtual void unfilteredReset () = 0;
 
@@ -215,7 +215,7 @@ public:
 
   // Get image parameters which are defined by the stream contents.
   virtual void getImageParams(int * /*bitsPerComponent*/,
-			      StreamColorSpaceMode * /*csMode*/) {}
+                              StreamColorSpaceMode * /*csMode*/) {}
 
   // Return the next stream in the "stack".
   virtual Stream *getNextStream() { return nullptr; }
@@ -236,7 +236,7 @@ private:
 
   Stream *makeFilter(const char *name, Stream *str, Object *params, int recursion = 0, Dict *dict = nullptr);
 
-  std::atomic_int ref;			// reference count
+  std::atomic_int ref;                        // reference count
 };
 
 
@@ -305,7 +305,7 @@ public:
   ~BaseStream();
   virtual BaseStream *copy() = 0;
   virtual Stream *makeSubStream(Goffset start, bool limited,
-				Goffset length, Object &&dict) = 0;
+                                Goffset length, Object &&dict) = 0;
   void setPos(Goffset pos, int dir = 0) override = 0;
   bool isBinary(bool last = true) override { return last; }
   BaseStream *getBaseStream() override { return this; }
@@ -389,15 +389,15 @@ public:
 
 private:
 
-  Stream *str;			// base stream
-  int width;			// pixels per line
-  int nComps;			// components per pixel
-  int nBits;			// bits per component
-  int nVals;			// components per line
-  int inputLineSize;		// input line buffer size
-  unsigned char *inputLine;		// input line buffer
-  unsigned char *imgLine;		// line buffer
-  int imgIdx;			// current index in imgLine
+  Stream *str;                      // base stream
+  int width;                        // pixels per line
+  int nComps;                       // components per pixel
+  int nBits;                        // bits per component
+  int nVals;                        // components per line
+  int inputLineSize;                // input line buffer size
+  unsigned char *inputLine;         // input line buffer
+  unsigned char *imgLine;           // line buffer
+  int imgIdx;                       // current index in imgLine
 };
 
 //------------------------------------------------------------------------
@@ -410,7 +410,7 @@ public:
   // Create a predictor object.  Note that the parameters are for the
   // predictor, and may not match the actual image parameters.
   StreamPredictor(Stream *strA, int predictorA,
-		  int widthA, int nCompsA, int nBitsA);
+                  int widthA, int nCompsA, int nBitsA);
 
   ~StreamPredictor();
 
@@ -427,16 +427,16 @@ private:
 
   bool getNextLine();
 
-  Stream *str;			// base stream
-  int predictor;		// predictor
-  int width;			// pixels per line
-  int nComps;			// components per pixel
-  int nBits;			// bits per component
-  int nVals;			// components per line
-  int pixBytes;			// bytes per pixel
-  int rowBytes;			// bytes per line
-  unsigned char *predLine;		// line buffer
-  int predIdx;			// current index in predLine
+  Stream *str;                        // base stream
+  int predictor;                // predictor
+  int width;                        // pixels per line
+  int nComps;                        // components per pixel
+  int nBits;                        // bits per component
+  int nVals;                        // components per line
+  int pixBytes;                        // bytes per pixel
+  int rowBytes;                        // bytes per line
+  unsigned char *predLine;                // line buffer
+  int predIdx;                        // current index in predLine
   bool ok;
 };
 
@@ -450,11 +450,11 @@ class FileStream: public BaseStream {
 public:
 
   FileStream(GooFile* fileA, Goffset startA, bool limitedA,
-	     Goffset lengthA, Object &&dictA);
+             Goffset lengthA, Object &&dictA);
   ~FileStream();
   BaseStream *copy() override;
   Stream *makeSubStream(Goffset startA, bool limitedA,
-				Goffset lengthA, Object &&dictA) override;
+                                Goffset lengthA, Object &&dictA) override;
   StreamKind getKind() override { return strFile; }
   void reset() override;
   void close() override;
@@ -473,7 +473,7 @@ public:
 private:
 
   bool fillBuf();
-  
+
   bool hasGetChars() override { return true; }
   int getChars(int nChars, unsigned char *buffer) override
     {
@@ -520,11 +520,11 @@ class CachedFileStream: public BaseStream {
 public:
 
   CachedFileStream(CachedFile *ccA, Goffset startA, bool limitedA,
-	     Goffset lengthA, Object &&dictA);
+                   Goffset lengthA, Object &&dictA);
   ~CachedFileStream();
   BaseStream *copy() override;
   Stream *makeSubStream(Goffset startA, bool limitedA,
-				Goffset lengthA, Object &&dictA) override;
+                        Goffset lengthA, Object &&dictA) override;
   StreamKind getKind() override { return strCachedFile; }
   void reset() override;
   void close() override;
@@ -629,7 +629,7 @@ public:
 
   int getUnfilteredChar () override { return getChar(); }
 
-  void unfilteredReset () override { reset (); } 
+  void unfilteredReset () override { reset (); }
 
 protected:
   T *buf;
@@ -696,7 +696,7 @@ public:
   ~EmbedStream();
   BaseStream *copy() override;
   Stream *makeSubStream(Goffset start, bool limitedA,
-				Goffset lengthA, Object &&dictA) override;
+                                Goffset lengthA, Object &&dictA) override;
   StreamKind getKind() override { return str->getKind(); }
   void reset() override {}
   int getChar() override;
@@ -726,7 +726,6 @@ private:
   long bufMax;
   long bufLen;
   long bufPos;
-
 };
 
 //------------------------------------------------------------------------
@@ -785,7 +784,7 @@ class LZWStream: public FilterStream {
 public:
 
   LZWStream(Stream *strA, int predictor, int columns, int colors,
-	    int bits, int earlyA);
+            int bits, int earlyA);
   ~LZWStream();
   StreamKind getKind() override { return strLZW; }
   void reset() override;
@@ -813,24 +812,24 @@ private:
     return seqBuf[seqIndex++];
   }
 
-  StreamPredictor *pred;	// predictor
-  int early;			// early parameter
-  bool eof;			// true if at eof
-  unsigned int inputBuf;	// input buffer
-  int inputBits;		// number of bits in input buffer
-  struct {			// decoding table
+  StreamPredictor *pred;        // predictor
+  int early;                    // early parameter
+  bool eof;                     // true if at eof
+  unsigned int inputBuf;        // input buffer
+  int inputBits;                // number of bits in input buffer
+  struct {                      // decoding table
     int length;
     int head;
     unsigned char tail;
   } table[4097];
-  int nextCode;			// next code to be used
-  int nextBits;			// number of bits in next code word
-  int prevCode;			// previous code used in stream
-  int newChar;			// next char to be added to table
-  unsigned char seqBuf[4097];		// buffer for current sequence
-  int seqLength;		// length of current sequence
-  int seqIndex;			// index into current sequence
-  bool first;			// first code after a table clear
+  int nextCode;                        // next code to be used
+  int nextBits;                        // number of bits in next code word
+  int prevCode;                        // previous code used in stream
+  int newChar;                         // next char to be added to table
+  unsigned char seqBuf[4097];          // buffer for current sequence
+  int seqLength;                       // length of current sequence
+  int seqIndex;                        // index into current sequence
+  bool first;                          // first code after a table clear
 
   bool processNextCode();
   void clearTable();
@@ -860,9 +859,9 @@ private:
   bool hasGetChars() override { return true; }
   int getChars(int nChars, unsigned char *buffer) override;
 
-  char buf[128];		// buffer
-  char *bufPtr;			// next char to read
-  char *bufEnd;			// end of buffer
+  char buf[128];                // buffer
+  char *bufPtr;                 // next char to read
+  char *bufEnd;                 // end of buffer
   bool eof;
 
   bool fillBuf();
@@ -878,8 +877,8 @@ class CCITTFaxStream: public FilterStream {
 public:
 
   CCITTFaxStream(Stream *strA, int encodingA, bool endOfLineA,
-		 bool byteAlignA, int columnsA, int rowsA,
-		 bool endOfBlockA, bool blackA, int damagedRowsBeforeErrorA);
+                 bool byteAlignA, int columnsA, int rowsA,
+                 bool endOfBlockA, bool blackA, int damagedRowsBeforeErrorA);
   ~CCITTFaxStream();
   StreamKind getKind() override { return strCCITTFax; }
   void reset() override;
@@ -902,25 +901,25 @@ public:
 private:
 
   void ccittReset(bool unfiltered);
-  int encoding;			// 'K' parameter
-  bool endOfLine;		// 'EndOfLine' parameter
-  bool byteAlign;		// 'EncodedByteAlign' parameter
-  int columns;			// 'Columns' parameter
-  int rows;			// 'Rows' parameter
-  bool endOfBlock;		// 'EndOfBlock' parameter
-  bool black;			// 'BlackIs1' parameter
+  int encoding;                        // 'K' parameter
+  bool endOfLine;                // 'EndOfLine' parameter
+  bool byteAlign;                // 'EncodedByteAlign' parameter
+  int columns;                        // 'Columns' parameter
+  int rows;                        // 'Rows' parameter
+  bool endOfBlock;                // 'EndOfBlock' parameter
+  bool black;                        // 'BlackIs1' parameter
   int damagedRowsBeforeError;   // 'DamagedRowsBeforeError' parameter
-  bool eof;			// true if at eof
-  bool nextLine2D;		// true if next line uses 2D encoding
-  int row;			// current row
-  unsigned int inputBuf;		// input buffer
-  int inputBits;		// number of bits in input buffer
-  int *codingLine;		// coding line changing elements
-  int *refLine;			// reference line changing elements
-  int a0i;			// index into codingLine
-  bool err;			// error on current line
-  int outputBits;		// remaining ouput bits
-  int buf;			// character buffer
+  bool eof;                        // true if at eof
+  bool nextLine2D;                // true if next line uses 2D encoding
+  int row;                        // current row
+  unsigned int inputBuf;                // input buffer
+  int inputBits;                // number of bits in input buffer
+  int *codingLine;                // coding line changing elements
+  int *refLine;                        // reference line changing elements
+  int a0i;                        // index into codingLine
+  bool err;                        // error on current line
+  int outputBits;                // remaining ouput bits
+  int buf;                        // character buffer
 
   void addPixels(int a1, int blackPixels);
   void addPixelsNeg(int a1, int blackPixels);
@@ -938,28 +937,28 @@ private:
 
 // DCT component info
 struct DCTCompInfo {
-  int id;			// component ID
-  int hSample, vSample;		// horiz/vert sampling resolutions
-  int quantTable;		// quantization table number
-  int prevDC;			// DC coefficient accumulator
+  int id;                        // component ID
+  int hSample, vSample;          // horiz/vert sampling resolutions
+  int quantTable;                // quantization table number
+  int prevDC;                    // DC coefficient accumulator
 };
 
 struct DCTScanInfo {
-  bool comp[4];		// comp[i] is set if component i is
-				//   included in this scan
-  int numComps;			// number of components in the scan
-  int dcHuffTable[4];		// DC Huffman table numbers
-  int acHuffTable[4];		// AC Huffman table numbers
-  int firstCoeff, lastCoeff;	// first and last DCT coefficient
-  int ah, al;			// successive approximation parameters
+  bool comp[4];                // comp[i] is set if component i is
+                                //   included in this scan
+  int numComps;                        // number of components in the scan
+  int dcHuffTable[4];                // DC Huffman table numbers
+  int acHuffTable[4];                // AC Huffman table numbers
+  int firstCoeff, lastCoeff;        // first and last DCT coefficient
+  int ah, al;                        // successive approximation parameters
 };
 
 // DCT Huffman decoding table
 struct DCTHuffTable {
-  unsigned char firstSym[17];		// first symbol for this bit length
-  unsigned short firstCode[17];	// first code for this bit length
-  unsigned short numCodes[17];		// number of codes of this bit length
-  unsigned char sym[256];		// symbols
+  unsigned char firstSym[17];          // first symbol for this bit length
+  unsigned short firstCode[17];        // first code for this bit length
+  unsigned short numCodes[17];         // number of codes of this bit length
+  unsigned char sym[256];              // symbols
 };
 
 class DCTStream: public FilterStream {
@@ -979,48 +978,48 @@ public:
 
 private:
 
-  void dctReset(bool unfiltered);  
-  bool progressive;		// set if in progressive mode
-  bool interleaved;		// set if in interleaved mode
-  int width, height;		// image size
-  int mcuWidth, mcuHeight;	// size of min coding unit, in data units
-  int bufWidth, bufHeight;	// frameBuf size
-  DCTCompInfo compInfo[4];	// info for each component
-  DCTScanInfo scanInfo;		// info for the current scan
-  int numComps;			// number of components in image
-  int colorXform;		// color transform: -1 = unspecified
-				//                   0 = none
-				//                   1 = YUV/YUVK -> RGB/CMYK
-  bool gotJFIFMarker;		// set if APP0 JFIF marker was present
-  bool gotAdobeMarker;		// set if APP14 Adobe marker was present
-  int restartInterval;		// restart interval, in MCUs
-  unsigned short quantTables[4][64];	// quantization tables
-  int numQuantTables;		// number of quantization tables
-  DCTHuffTable dcHuffTables[4];	// DC Huffman tables
-  DCTHuffTable acHuffTables[4];	// AC Huffman tables
-  int numDCHuffTables;		// number of DC Huffman tables
-  int numACHuffTables;		// number of AC Huffman tables
-  unsigned char *rowBuf[4][32];	// buffer for one MCU (non-progressive mode)
-  int *frameBuf[4];		// buffer for frame (progressive mode)
-  int comp, x, y, dy;		// current position within image/MCU
-  int restartCtr;		// MCUs left until restart
-  int restartMarker;		// next restart marker
-  int eobRun;			// number of EOBs left in the current run
-  int inputBuf;			// input buffer for variable length codes
-  int inputBits;		// number of valid bits in input buffer
+  void dctReset(bool unfiltered);
+  bool progressive;                // set if in progressive mode
+  bool interleaved;                // set if in interleaved mode
+  int width, height;               // image size
+  int mcuWidth, mcuHeight;         // size of min coding unit, in data units
+  int bufWidth, bufHeight;         // frameBuf size
+  DCTCompInfo compInfo[4];         // info for each component
+  DCTScanInfo scanInfo;            // info for the current scan
+  int numComps;                    // number of components in image
+  int colorXform;                  // color transform: -1 = unspecified
+                                   //                   0 = none
+                                   //                   1 = YUV/YUVK -> RGB/CMYK
+  bool gotJFIFMarker;              // set if APP0 JFIF marker was present
+  bool gotAdobeMarker;             // set if APP14 Adobe marker was present
+  int restartInterval;             // restart interval, in MCUs
+  unsigned short quantTables[4][64];        // quantization tables
+  int numQuantTables;                // number of quantization tables
+  DCTHuffTable dcHuffTables[4];        // DC Huffman tables
+  DCTHuffTable acHuffTables[4];        // AC Huffman tables
+  int numDCHuffTables;                // number of DC Huffman tables
+  int numACHuffTables;                // number of AC Huffman tables
+  unsigned char *rowBuf[4][32];        // buffer for one MCU (non-progressive mode)
+  int *frameBuf[4];                // buffer for frame (progressive mode)
+  int comp, x, y, dy;                // current position within image/MCU
+  int restartCtr;                // MCUs left until restart
+  int restartMarker;                // next restart marker
+  int eobRun;                        // number of EOBs left in the current run
+  int inputBuf;                        // input buffer for variable length codes
+  int inputBits;                // number of valid bits in input buffer
 
   void restart();
   bool readMCURow();
   void readScan();
   bool readDataUnit(DCTHuffTable *dcHuffTable,
-		     DCTHuffTable *acHuffTable,
-		     int *prevDC, int data[64]);
+                     DCTHuffTable *acHuffTable,
+                     int *prevDC, int data[64]);
   bool readProgressiveDataUnit(DCTHuffTable *dcHuffTable,
-				DCTHuffTable *acHuffTable,
-				int *prevDC, int data[64]);
+                                DCTHuffTable *acHuffTable,
+                                int *prevDC, int data[64]);
   void decodeImage();
   void transformDataUnit(unsigned short *quantTable,
-			 int dataIn[64], unsigned char dataOut[64]);
+                         int dataIn[64], unsigned char dataOut[64]);
   int readHuffSym(DCTHuffTable *table);
   int readAmp(int size);
   int readBit();
@@ -1054,8 +1053,8 @@ private:
 
 // Huffman code table entry
 struct FlateCode {
-  unsigned short len;			// code length, in bits
-  unsigned short val;			// value represented by this code
+  unsigned short len;                        // code length, in bits
+  unsigned short val;                        // value represented by this code
 };
 
 struct FlateHuffmanTab {
@@ -1065,15 +1064,15 @@ struct FlateHuffmanTab {
 
 // Decoding info for length and distance code words
 struct FlateDecode {
-  int bits;			// # extra bits
-  int first;			// first length/distance
+  int bits;                        // # extra bits
+  int first;                        // first length/distance
 };
 
 class FlateStream: public FilterStream {
 public:
 
   FlateStream(Stream *strA, int predictor, int columns,
-	      int colors, int bits);
+              int colors, int bits);
   ~FlateStream();
   StreamKind getKind() override { return strFlate; }
   void reset() override;
@@ -1104,30 +1103,30 @@ private:
   bool hasGetChars() override { return true; }
   int getChars(int nChars, unsigned char *buffer) override;
 
-  StreamPredictor *pred;	// predictor
-  unsigned char buf[flateWindow];	// output data buffer
-  int index;			// current index into output buffer
-  int remain;			// number valid bytes in output buffer
-  int codeBuf;			// input buffer
-  int codeSize;			// number of bits in input buffer
-  int				// literal and distance code lengths
+  StreamPredictor *pred;        // predictor
+  unsigned char buf[flateWindow];        // output data buffer
+  int index;                        // current index into output buffer
+  int remain;                        // number valid bytes in output buffer
+  int codeBuf;                        // input buffer
+  int codeSize;                        // number of bits in input buffer
+  int                                // literal and distance code lengths
     codeLengths[flateMaxLitCodes + flateMaxDistCodes];
-  FlateHuffmanTab litCodeTab;	// literal code table
-  FlateHuffmanTab distCodeTab;	// distance code table
-  bool compressedBlock;	// set if reading a compressed block
-  int blockLen;			// remaining length of uncompressed block
-  bool endOfBlock;		// set when end of block is reached
-  bool eof;			// set when end of stream is reached
+  FlateHuffmanTab litCodeTab;        // literal code table
+  FlateHuffmanTab distCodeTab;        // distance code table
+  bool compressedBlock;        // set if reading a compressed block
+  int blockLen;                        // remaining length of uncompressed block
+  bool endOfBlock;                // set when end of block is reached
+  bool eof;                        // set when end of stream is reached
 
-  static int			// code length code reordering
+  static int                        // code length code reordering
     codeLenCodeMap[flateMaxCodeLenCodes];
-  static FlateDecode		// length decoding info
+  static FlateDecode                // length decoding info
     lengthDecode[flateMaxLitCodes-257];
-  static FlateDecode		// distance decoding info
+  static FlateDecode                // distance decoding info
     distDecode[flateMaxDistCodes];
-  static FlateHuffmanTab	// fixed literal code table
+  static FlateHuffmanTab        // fixed literal code table
     fixedLitCodeTab;
-  static FlateHuffmanTab	// fixed distance code table
+  static FlateHuffmanTab        // fixed distance code table
     fixedDistCodeTab;
 
   void readSome();
@@ -1301,8 +1300,8 @@ private:
 
 struct LZWEncoderNode {
   int byte;
-  LZWEncoderNode *next;		// next sibling
-  LZWEncoderNode *children;	// first child
+  LZWEncoderNode *next;                // next sibling
+  LZWEncoderNode *children;        // first child
 };
 
 class LZWEncoder: public FilterStream {

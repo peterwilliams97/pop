@@ -42,7 +42,6 @@ public:
   void setICCProfile(const char *name, unsigned char *data, int size);
   void setSRGBProfile();
 
-
   bool init(FILE *f, int width, int height, int hDPI, int vDPI) override;
 
   bool writePointers(unsigned char **rowPointers, int rowCount) override;

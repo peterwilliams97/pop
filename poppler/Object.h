@@ -53,14 +53,14 @@
 #define OBJECT_2TYPES_CHECK(wanted_type1, wanted_type2) \
     if (unlikely(type != wanted_type1) && unlikely(type != wanted_type2)) { \
         error(errInternal, 0, "Call to Object where the object was type {0:d}, " \
-	      "not the expected type {1:d} or {2:d}", type, wanted_type1, wanted_type2); \
+              "not the expected type {1:d} or {2:d}", type, wanted_type1, wanted_type2); \
         abort(); \
     }
 
-#define OBJECT_3TYPES_CHECK(wanted_type1, wanted_type2, wanted_type3)	\
+#define OBJECT_3TYPES_CHECK(wanted_type1, wanted_type2, wanted_type3)        \
     if (unlikely(type != wanted_type1) && unlikely(type != wanted_type2) && unlikely(type != wanted_type3)) { \
         error(errInternal, 0, "Call to Object where the object was type {0:d}, " \
-	      "not the expected type {1:d}, {2:d} or {3:d}", type, wanted_type1, wanted_type2, wanted_type3); \
+              "not the expected type {1:d}, {2:d} or {3:d}", type, wanted_type1, wanted_type2, wanted_type3); \
         abort(); \
     }
 
@@ -80,8 +80,8 @@ class Stream;
 //------------------------------------------------------------------------
 
 struct Ref {
-  int num;			// object number
-  int gen;			// generation number
+  int num;                        // object number
+  int gen;                        // generation number
 };
 
 inline bool operator== (const Ref lhs, const Ref rhs) noexcept {
@@ -105,7 +105,7 @@ struct hash<Ref>
 
     result_type operator() (const argument_type ref) const noexcept
     {
-	return std::hash<int>{}(ref.num) ^ (std::hash<int>{}(ref.gen) << 1);
+        return std::hash<int>{}(ref.num) ^ (std::hash<int>{}(ref.gen) << 1);
     }
 };
 
@@ -117,31 +117,31 @@ struct hash<Ref>
 
 enum ObjType {
   // simple objects
-  objBool,			// boolean
-  objInt,			// integer
-  objReal,			// real
-  objString,			// string
-  objName,			// name
-  objNull,			// null
+  objBool,                        // boolean
+  objInt,                        // integer
+  objReal,                        // real
+  objString,                        // string
+  objName,                        // name
+  objNull,                        // null
 
   // complex objects
-  objArray,			// array
-  objDict,			// dictionary
-  objStream,			// stream
-  objRef,			// indirect reference
+  objArray,                        // array
+  objDict,                        // dictionary
+  objStream,                        // stream
+  objRef,                        // indirect reference
 
   // special objects
-  objCmd,			// command name
-  objError,			// error return from Lexer
-  objEOF,			// end of file return from Lexer
-  objNone,			// uninitialized object
+  objCmd,                        // command name
+  objError,                        // error return from Lexer
+  objEOF,                        // end of file return from Lexer
+  objNone,                        // uninitialized object
 
   // poppler-only objects
-  objInt64,			// integer with at least 64-bits
-  objDead			// and object after shallowCopy
+  objInt64,                        // integer with at least 64-bits
+  objDead                        // and object after shallowCopy
 };
 
-constexpr int numObjTypes = 16;		// total number of object types
+constexpr int numObjTypes = 16;                // total number of object types
 
 //------------------------------------------------------------------------
 // Object
@@ -305,18 +305,18 @@ private:
   // Free object contents.
   void free();
 
-  ObjType type;			// object type
-  union {			// value for each type:
-    bool booln;		//   boolean
-    int intg;			//   integer
-    long long int64g;           //   64-bit integer
-    double real;		//   real
-    GooString *string;		//   string
-    char *cString;		//   name or command, depending on objType
-    Array *array;		//   array
-    Dict *dict;			//   dictionary
-    Stream *stream;		//   stream
-    Ref ref;			//   indirect reference
+  ObjType type;                // object type
+  union {                      // value for each type:
+    bool booln;                //   boolean
+    int intg;                  //   integer
+    long long int64g;          //   64-bit integer
+    double real;               //   real
+    GooString *string;         //   string
+    char *cString;             //   name or command, depending on objType
+    Array *array;              //   array
+    Dict *dict;                //   dictionary
+    Stream *stream;            //   stream
+    Ref ref;                   //   indirect reference
   };
 };
 

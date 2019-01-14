@@ -70,7 +70,7 @@ public:
 //------------------------------------------------------------------------
 // GfxBlendMode
 //------------------------------------------------------------------------
- 
+
 enum GfxBlendMode {
   gfxBlendNormal,
   gfxBlendMultiply,
@@ -255,7 +255,7 @@ public:
   // Return the default ranges for each component, assuming an image
   // with a max pixel value of <maxImgPixel>.
   virtual void getDefaultRanges(double *decodeLow, double *decodeRange,
-				int maxImgPixel);
+                                int maxImgPixel);
 
   // Returns true if painting operations in this color space never
   // mark the page (e.g., the "None" colorant).
@@ -272,12 +272,12 @@ public:
 
 #ifdef USE_CMS
   static int setupColorProfiles();
-  // displayProfileA should be a cmsHPROFILE 
+  // displayProfileA should be a cmsHPROFILE
   static void setDisplayProfile(void *displayProfileA);
   static void setDisplayProfileName(GooString *name);
-  // result will be a cmsHPROFILE 
+  // result will be a cmsHPROFILE
   static void *getRGBProfile();
-  // result will be a cmsHPROFILE 
+  // result will be a cmsHPROFILE
   static void *getDisplayProfile();
 #endif
 protected:
@@ -356,8 +356,8 @@ private:
 
   double whiteX, whiteY, whiteZ;    // white point
   double blackX, blackY, blackZ;    // black point
-  double gamma;			    // gamma value
-  double kr, kg, kb;		    // gamut mapping mulitpliers
+  double gamma;                     // gamma value
+  double kr, kg, kb;                // gamut mapping mulitpliers
   void getXYZ(const GfxColor *color, double *pX, double *pY, double *pZ) const;
 #ifdef USE_CMS
   GfxColorTransform *transform;
@@ -438,8 +438,8 @@ private:
   double whiteX, whiteY, whiteZ;    // white point
   double blackX, blackY, blackZ;    // black point
   double gammaR, gammaG, gammaB;    // gamma values
-  double mat[9];		    // ABC -> XYZ transform matrix
-  double kr, kg, kb;		    // gamut mapping mulitpliers
+  double mat[9];                    // ABC -> XYZ transform matrix
+  double kr, kg, kb;                // gamut mapping mulitpliers
   void getXYZ(const GfxColor *color, double *pX, double *pY, double *pZ) const;
 #ifdef USE_CMS
   GfxColorTransform *transform;
@@ -501,7 +501,7 @@ public:
   void getDefaultColor(GfxColor *color) override;
 
   void getDefaultRanges(double *decodeLow, double *decodeRange,
-				int maxImgPixel) override;
+                                int maxImgPixel) override;
 
   // Lab-specific access.
   double getWhiteX() { return whiteX; }
@@ -520,7 +520,7 @@ private:
   double whiteX, whiteY, whiteZ;    // white point
   double blackX, blackY, blackZ;    // black point
   double aMin, aMax, bMin, bMax;    // range for the a and b components
-  double kr, kg, kb;		    // gamut mapping mulitpliers
+  double kr, kg, kb;                // gamut mapping mulitpliers
   void getXYZ(const GfxColor *color, double *pX, double *pY, double *pZ) const;
 #ifdef USE_CMS
   GfxColorTransform *transform;
@@ -534,8 +534,7 @@ private:
 class GfxICCBasedColorSpace: public GfxColorSpace {
 public:
 
-  GfxICCBasedColorSpace(int nCompsA, GfxColorSpace *altA,
-			Ref *iccProfileStreamA);
+  GfxICCBasedColorSpace(int nCompsA, GfxColorSpace *altA, Ref *iccProfileStreamA);
   ~GfxICCBasedColorSpace();
   GfxColorSpace *copy() override;
   GfxColorSpaceMode getMode() override { return csICCBased; }
@@ -561,18 +560,18 @@ public:
   void getDefaultColor(GfxColor *color) override;
 
   void getDefaultRanges(double *decodeLow, double *decodeRange,
-				int maxImgPixel) override;
+                                int maxImgPixel) override;
 
   // ICCBased-specific access.
   GfxColorSpace *getAlt() { return alt; }
 
 private:
 
-  int nComps;			// number of color components (1, 3, or 4)
-  GfxColorSpace *alt;		// alternate color space
-  double rangeMin[4];		// min values for each component
-  double rangeMax[4];		// max values for each component
-  Ref iccProfileStream;		// the ICC profile
+  int nComps;                        // number of color components (1, 3, or 4)
+  GfxColorSpace *alt;                // alternate color space
+  double rangeMin[4];                // min values for each component
+  double rangeMax[4];                // max values for each component
+  Ref iccProfileStream;              // the ICC profile
 #ifdef USE_CMS
   int getIntent() { return (transform != nullptr) ? transform->getIntent() : 0; }
   GfxColorTransform *transform;
@@ -613,7 +612,7 @@ public:
   void getDefaultColor(GfxColor *color) override;
 
   void getDefaultRanges(double *decodeLow, double *decodeRange,
-				int maxImgPixel) override;
+                                int maxImgPixel) override;
 
   // Indexed-specific access.
   GfxColorSpace *getBase() { return base; }
@@ -627,9 +626,9 @@ public:
 
 private:
 
-  GfxColorSpace *base;		// base color space
-  int indexHigh;		// max pixel value
-  unsigned char *lookup;		// lookup table
+  GfxColorSpace *base;          // base color space
+  int indexHigh;                // max pixel value
+  unsigned char *lookup;        // lookup table
 };
 
 //------------------------------------------------------------------------
@@ -640,7 +639,7 @@ class GfxSeparationColorSpace: public GfxColorSpace {
 public:
 
   GfxSeparationColorSpace(GooString *nameA, GfxColorSpace *altA,
-			  Function *funcA);
+                          Function *funcA);
   ~GfxSeparationColorSpace();
   GfxColorSpace *copy() override;
   GfxColorSpaceMode getMode() override { return csSeparation; }
@@ -668,12 +667,12 @@ public:
 private:
 
   GfxSeparationColorSpace(GooString *nameA, GfxColorSpace *altA,
-			  Function *funcA, bool nonMarkingA,
-			  unsigned int overprintMaskA, int *mappingA);
+                          Function *funcA, bool nonMarkingA,
+                          unsigned int overprintMaskA, int *mappingA);
 
-  GooString *name;		// colorant name
-  GfxColorSpace *alt;		// alternate color space
-  Function *func;		// tint transform (into alternate color space)
+  GooString *name;               // colorant name
+  GfxColorSpace *alt;            // alternate color space
+  Function *func;                // tint transform (into alternate color space)
   bool nonMarking;
 };
 
@@ -685,7 +684,7 @@ class GfxDeviceNColorSpace: public GfxColorSpace {
 public:
 
   GfxDeviceNColorSpace(int nCompsA, GooString **namesA,
-		       GfxColorSpace *alt, Function *func, GooList *sepsCS);
+                       GfxColorSpace *alt, Function *func, GooList *sepsCS);
   ~GfxDeviceNColorSpace();
   GfxColorSpace *copy() override;
   GfxColorSpaceMode getMode() override { return csDeviceN; }
@@ -713,14 +712,14 @@ public:
 private:
 
   GfxDeviceNColorSpace(int nCompsA, GooString **namesA,
-		       GfxColorSpace *alt, Function *func, GooList *sepsCSA,
-		       int *mappingA, bool nonMarkingA, unsigned int overprintMaskA);
+                       GfxColorSpace *alt, Function *func, GooList *sepsCSA,
+                       int *mappingA, bool nonMarkingA, unsigned int overprintMaskA);
 
-  int nComps;			// number of components
-  GooString			// colorant names
+  int nComps;                      // number of components
+  GooString                        // colorant names
     *names[gfxColorMaxComps];
-  GfxColorSpace *alt;		// alternate color space
-  Function *func;		// tint transform (into alternate color space)
+  GfxColorSpace *alt;              // alternate color space
+  Function *func;                  // tint transform (into alternate color space)
   bool nonMarking;
   GooList *sepsCS; // list of separation cs for spot colorants;
 };
@@ -753,8 +752,8 @@ public:
 
 private:
 
-  GfxColorSpace *under;		// underlying color space (for uncolored
-				//   patterns)
+  GfxColorSpace *under;         // underlying color space (for uncolored
+                                //   patterns)
 };
 
 //------------------------------------------------------------------------
@@ -809,9 +808,9 @@ public:
 private:
 
   GfxTilingPattern(int paintTypeA, int tilingTypeA,
-		   double *bboxA, double xStepA, double yStepA,
-		   Object *resDictA, double *matrixA,
-		   Object *contentStreamA, int patternRefNumA);
+                   double *bboxA, double xStepA, double yStepA,
+                   Object *resDictA, double *matrixA,
+                   Object *contentStreamA, int patternRefNumA);
 
   int paintType;
   int tilingType;
@@ -898,9 +897,9 @@ class GfxUnivariateShading: public GfxShading {
 public:
 
   GfxUnivariateShading(int typeA,
-		       double t0A, double t1A,
-		       Function **funcsA, int nFuncsA,
-		       bool extend0A, bool extend1A);
+                       double t0A, double t1A,
+                       Function **funcsA, int nFuncsA,
+                       bool extend0A, bool extend1A);
   GfxUnivariateShading(GfxUnivariateShading *shading);
   ~GfxUnivariateShading();
 
@@ -915,12 +914,12 @@ public:
   int getColor(double t, GfxColor *color);
 
   void setupCache(const Matrix *ctm,
-		  double xMin, double yMin,
-		  double xMax, double yMax);
+                  double xMin, double yMin,
+                  double xMax, double yMax);
 
   virtual void getParameterRange(double *lower, double *upper,
-				 double xMin, double yMin,
-				 double xMax, double yMax) = 0;
+                                 double xMin, double yMin,
+                                 double xMax, double yMax) = 0;
 
   virtual double getDistance(double tMin, double tMax) = 0;
 
@@ -945,9 +944,9 @@ class GfxFunctionShading: public GfxShading {
 public:
 
   GfxFunctionShading(double x0A, double y0A,
-		     double x1A, double y1A,
-		     double *matrixA,
-		     Function **funcsA, int nFuncsA);
+                     double x1A, double y1A,
+                     double *matrixA,
+                     Function **funcsA, int nFuncsA);
   GfxFunctionShading(GfxFunctionShading *shading);
   ~GfxFunctionShading();
 
@@ -978,10 +977,10 @@ class GfxAxialShading: public GfxUnivariateShading {
 public:
 
   GfxAxialShading(double x0A, double y0A,
-		  double x1A, double y1A,
-		  double t0A, double t1A,
-		  Function **funcsA, int nFuncsA,
-		  bool extend0A, bool extend1A);
+                  double x1A, double y1A,
+                  double t0A, double t1A,
+                  Function **funcsA, int nFuncsA,
+                  bool extend0A, bool extend1A);
   GfxAxialShading(GfxAxialShading *shading);
   ~GfxAxialShading();
 
@@ -993,8 +992,8 @@ public:
     { *x0A = x0; *y0A = y0; *x1A = x1; *y1A = y1; }
 
   void getParameterRange(double *lower, double *upper,
-				 double xMin, double yMin,
-				 double xMax, double yMax) override;
+                                 double xMin, double yMin,
+                                 double xMax, double yMax) override;
 
   double getDistance(double tMin, double tMax) override;
 
@@ -1011,10 +1010,10 @@ class GfxRadialShading: public GfxUnivariateShading {
 public:
 
   GfxRadialShading(double x0A, double y0A, double r0A,
-		   double x1A, double y1A, double r1A,
-		   double t0A, double t1A,
-		   Function **funcsA, int nFuncsA,
-		   bool extend0A, bool extend1A);
+                   double x1A, double y1A, double r1A,
+                   double t0A, double t1A,
+                   Function **funcsA, int nFuncsA,
+                   bool extend0A, bool extend1A);
   GfxRadialShading(GfxRadialShading *shading);
   ~GfxRadialShading();
 
@@ -1023,12 +1022,12 @@ public:
   GfxShading *copy() override;
 
   void getCoords(double *x0A, double *y0A, double *r0A,
-		 double *x1A, double *y1A, double *r1A) const
+                 double *x1A, double *y1A, double *r1A) const
     { *x0A = x0; *y0A = y0; *r0A = r0; *x1A = x1; *y1A = y1; *r1A = r1; }
 
   void getParameterRange(double *lower, double *upper,
-				 double xMin, double yMin,
-				 double xMax, double yMax) override;
+                                 double xMin, double yMin,
+                                 double xMax, double yMax) override;
 
   double getDistance(double tMin, double tMax) override;
 
@@ -1050,9 +1049,9 @@ class GfxGouraudTriangleShading: public GfxShading {
 public:
 
   GfxGouraudTriangleShading(int typeA,
-			    GfxGouraudVertex *verticesA, int nVerticesA,
-			    int (*trianglesA)[3], int nTrianglesA,
-			    Function **funcsA, int nFuncsA);
+                            GfxGouraudVertex *verticesA, int nVerticesA,
+                            int (*trianglesA)[3], int nTrianglesA,
+                            Function **funcsA, int nFuncsA);
   GfxGouraudTriangleShading(GfxGouraudTriangleShading *shading);
   ~GfxGouraudTriangleShading();
 
@@ -1078,8 +1077,8 @@ public:
    * @precondition isParameterized() == false
    */
   void getTriangle(int i, double *x0, double *y0, GfxColor *color0,
-		   double *x1, double *y1, GfxColor *color1,
-		   double *x2, double *y2, GfxColor *color2);
+                   double *x1, double *y1, GfxColor *color1,
+                   double *x2, double *y2, GfxColor *color2);
 
   /**
    * Variant for functions.
@@ -1087,8 +1086,8 @@ public:
    * @precondition isParameterized() == true
    */
   void getTriangle(int i, double *x0, double *y0, double *color0,
-		   double *x1, double *y1, double *color1,
-		   double *x2, double *y2, double *color2);
+                   double *x1, double *y1, double *color1,
+                   double *x2, double *y2, double *color2);
 
   void getParameterizedColor(double t, GfxColor *color) const;
 
@@ -1138,7 +1137,7 @@ class GfxPatchMeshShading: public GfxShading {
 public:
 
   GfxPatchMeshShading(int typeA, GfxPatch *patchesA, int nPatchesA,
-		      Function **funcsA, int nFuncsA);
+                      Function **funcsA, int nFuncsA);
   GfxPatchMeshShading(GfxPatchMeshShading *shading);
   ~GfxPatchMeshShading();
 
@@ -1203,7 +1202,7 @@ public:
   // Get decode table.
   double getDecodeLow(int i) const { return decodeLow[i]; }
   double getDecodeHigh(int i) const { return decodeLow[i] + decodeRange[i]; }
-  
+
   bool useRGBLine() const { return (colorSpace2 && colorSpace2->useGetRGBLine ()) || (!colorSpace2 && colorSpace->useGetRGBLine ()); }
   bool useCMYKLine() const { return (colorSpace2 && colorSpace2->useGetCMYKLine ()) || (!colorSpace2 && colorSpace->useGetCMYKLine ()); }
   bool useDeviceNLine() const { return (colorSpace2 && colorSpace2->useGetDeviceNLine ()) || (!colorSpace2 && colorSpace->useGetDeviceNLine ()); }
@@ -1228,19 +1227,19 @@ private:
 
   GfxImageColorMap(GfxImageColorMap *colorMap);
 
-  GfxColorSpace *colorSpace;	// the image color space
-  int bits;			// bits per component
-  int nComps;			// number of components in a pixel
-  GfxColorSpace *colorSpace2;	// secondary color space
-  int nComps2;			// number of components in colorSpace2
-  GfxColorComp *		// lookup table
+  GfxColorSpace *colorSpace;        // the image color space
+  int bits;                         // bits per component
+  int nComps;                       // number of components in a pixel
+  GfxColorSpace *colorSpace2;       // secondary color space
+  int nComps2;                      // number of components in colorSpace2
+  GfxColorComp *                    // lookup table
     lookup[gfxColorMaxComps];
-  GfxColorComp *		// optimized case lookup table
+  GfxColorComp *                    // optimized case lookup table
     lookup2[gfxColorMaxComps];
   unsigned char *byte_lookup;
-  double			// minimum values for each component
+  double                            // minimum values for each component
     decodeLow[gfxColorMaxComps];
-  double			// max - min value for each component
+  double                            // max - min value for each component
     decodeRange[gfxColorMaxComps];
   bool useMatte;
   GfxColor matteColor;
@@ -1284,7 +1283,7 @@ public:
 
   // Add a Bezier curve.
   void curveTo(double x1, double y1, double x2, double y2,
-	       double x3, double y3);
+               double x3, double y3);
 
   // Close the subpath.
   void close();
@@ -1295,12 +1294,12 @@ public:
 
 private:
 
-  double *x, *y;		// points
-  bool *curve;			// curve[i] => point i is a control point
-				//   for a Bezier curve
-  int n;			// number of points
-  int size;			// size of x/y arrays
-  bool closed;			// set if path is closed
+  double *x, *y;                // points
+  bool *curve;                  // curve[i] => point i is a control point
+                                //   for a Bezier curve
+  int n;                        // number of points
+  int size;                     // size of x/y arrays
+  bool closed;                  // set if path is closed
 
   GfxSubpath(const GfxSubpath *subpath);
 };
@@ -1343,7 +1342,7 @@ public:
 
   // Add a Bezier curve to the last subpath
   void curveTo(double x1, double y1, double x2, double y2,
-	       double x3, double y3);
+               double x3, double y3);
 
   // Close the last subpath.
   void close();
@@ -1356,14 +1355,14 @@ public:
 
 private:
 
-  bool justMoved;		// set if a new subpath was just started
-  double firstX, firstY;	// first point in new subpath
-  GfxSubpath **subpaths;	// subpaths
-  int n;			// number of subpaths
-  int size;			// size of subpaths array
+  bool justMoved;                // set if a new subpath was just started
+  double firstX, firstY;        // first point in new subpath
+  GfxSubpath **subpaths;        // subpaths
+  int n;                        // number of subpaths
+  int size;                     // size of subpaths array
 
   GfxPath(bool justMoved1, double firstX1, double firstY1,
-	  GfxSubpath **subpaths1, int n1, int size1);
+          GfxSubpath **subpaths1, int n1, int size1);
 };
 
 //------------------------------------------------------------------------
@@ -1432,7 +1431,7 @@ public:
   // x <vDPI>, page box <pageBox>, page rotation <rotateA>, and
   // coordinate system specified by <upsideDown>.
   GfxState(double hDPIA, double vDPIA, const PDFRectangle *pageBox,
-	   int rotateA, bool upsideDown);
+           int rotateA, bool upsideDown);
 
   // Destructor.
   ~GfxState();
@@ -1540,9 +1539,9 @@ public:
 
   // Change state parameters.
   void setCTM(double a, double b, double c,
-	      double d, double e, double f);
+              double d, double e, double f);
   void concatCTM(double a, double b, double c,
-		 double d, double e, double f);
+                 double d, double e, double f);
   void shiftCTMAndClip(double tx, double ty);
   void setFillColorSpace(GfxColorSpace *colorSpace);
   void setStrokeColorSpace(GfxColorSpace *colorSpace);
@@ -1568,7 +1567,7 @@ public:
   void setTextKnockout(bool tk) { textKnockout = tk; }
   void setFont(GfxFont *fontA, double fontSizeA);
   void setTextMat(double a, double b, double c,
-		  double d, double e, double f)
+                  double d, double e, double f)
     { textMat[0] = a; textMat[1] = b; textMat[2] = c;
       textMat[3] = d; textMat[4] = e; textMat[5] = f; }
   void setCharSpace(double space)
@@ -1598,7 +1597,7 @@ public:
   void lineTo(double x, double y)
     { path->lineTo(curX = x, curY = y); }
   void curveTo(double x1, double y1, double x2, double y2,
-	       double x3, double y3)
+               double x3, double y3)
     { path->curveTo(x1, y1, x2, y2, curX = x3, curY = y3); }
   void closePath()
     { path->close(); curX = path->getLastX(); curY = path->getLastY(); }
@@ -1628,60 +1627,60 @@ public:
   ReusablePathIterator *getReusablePath() { return new ReusablePathIterator(path); }
 private:
 
-  double hDPI, vDPI;		// resolution
-  double ctm[6];		// coord transform matrix
-  double px1, py1, px2, py2;	// page corners (user coords)
-  double pageWidth, pageHeight;	// page size (pixels)
-  int rotate;			// page rotation angle
+  double hDPI, vDPI;                // resolution
+  double ctm[6];                // coord transform matrix
+  double px1, py1, px2, py2;        // page corners (user coords)
+  double pageWidth, pageHeight;        // page size (pixels)
+  int rotate;                        // page rotation angle
 
   GfxColorSpace *fillColorSpace;   // fill color space
   GfxColorSpace *strokeColorSpace; // stroke color space
-  GfxColor fillColor;		// fill color
-  GfxColor strokeColor;		// stroke color
-  GfxPattern *fillPattern;	// fill pattern
-  GfxPattern *strokePattern;	// stroke pattern
-  GfxBlendMode blendMode;	// transparency blend mode
-  double fillOpacity;		// fill opacity
-  double strokeOpacity;		// stroke opacity
-  bool fillOverprint;		// fill overprint
-  bool strokeOverprint;	// stroke overprint
-  int overprintMode;		// overprint mode
-  Function *transfer[4];	// transfer function (entries may be: all
-				//   nullptr = identity; last three nullptr =
-				//   single function; all four non-nullptr =
-				//   R,G,B,gray functions)
+  GfxColor fillColor;                // fill color
+  GfxColor strokeColor;                // stroke color
+  GfxPattern *fillPattern;        // fill pattern
+  GfxPattern *strokePattern;        // stroke pattern
+  GfxBlendMode blendMode;        // transparency blend mode
+  double fillOpacity;                // fill opacity
+  double strokeOpacity;                // stroke opacity
+  bool fillOverprint;                // fill overprint
+  bool strokeOverprint;        // stroke overprint
+  int overprintMode;                // overprint mode
+  Function *transfer[4];        // transfer function (entries may be: all
+                                //   nullptr = identity; last three nullptr =
+                                //   single function; all four non-nullptr =
+                                //   R,G,B,gray functions)
 
-  double lineWidth;		// line width
-  double *lineDash;		// line dash
+  double lineWidth;                // line width
+  double *lineDash;                // line dash
   int lineDashLength;
   double lineDashStart;
-  int flatness;			// curve flatness
-  int lineJoin;			// line join style
-  int lineCap;			// line cap style
-  double miterLimit;		// line miter limit
-  bool strokeAdjust;		// stroke adjustment
-  bool alphaIsShape;		// alpha is shape
-  bool textKnockout;		// text knockout
+  int flatness;                        // curve flatness
+  int lineJoin;                        // line join style
+  int lineCap;                        // line cap style
+  double miterLimit;                // line miter limit
+  bool strokeAdjust;                // stroke adjustment
+  bool alphaIsShape;                // alpha is shape
+  bool textKnockout;                // text knockout
 
-  GfxFont *font;		// font
-  double fontSize;		// font size
-  double textMat[6];		// text matrix
-  double charSpace;		// character spacing
-  double wordSpace;		// word spacing
-  double horizScaling;		// horizontal scaling
-  double leading;		// text leading
-  double rise;			// text rise
-  int render;			// text rendering mode
+  GfxFont *font;                // font
+  double fontSize;                // font size
+  double textMat[6];                // text matrix
+  double charSpace;                // character spacing
+  double wordSpace;                // word spacing
+  double horizScaling;                // horizontal scaling
+  double leading;                // text leading
+  double rise;                        // text rise
+  int render;                        // text rendering mode
 
-  GfxPath *path;		// array of path elements
-  double curX, curY;		// current point (user coords)
-  double lineX, lineY;		// start of current text line (text coords)
+  GfxPath *path;                // array of path elements
+  double curX, curY;                // current point (user coords)
+  double lineX, lineY;                // start of current text line (text coords)
 
-  double clipXMin, clipYMin,	// bounding box for clip region
+  double clipXMin, clipYMin,        // bounding box for clip region
          clipXMax, clipYMax;
   char renderingIntent[32];
 
-  GfxState *saved;		// next GfxState on stack
+  GfxState *saved;                // next GfxState on stack
 
   GfxState(const GfxState *state, bool copyPath);
 

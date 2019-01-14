@@ -70,6 +70,8 @@ ImageOutputDev::ImageOutputDev(char *fileRootA, bool pageNamesA, bool listImages
     printf("page   num  type   width height color comp bpc  enc interp  object ID x-ppi y-ppi size ratio\n");
     printf("--------------------------------------------------------------------------------------------\n");
   }
+  printf("ImageOutputDev: outputPNG=%d outputTiff=%d dumpJPEG=%d dumpJP2=%d dumpJBIG2=%d dumpCCITT=%d\n",
+         outputPNG, outputTiff, dumpJPEG, dumpJP2, dumpJBIG2, dumpCCITT);
 }
 
 ImageOutputDev::~ImageOutputDev() {
@@ -408,12 +410,15 @@ void ImageOutputDev::writeImageFile(ImgWriter *writer, ImageFormat format, const
     case imgRGB:
       p = imgStr->getLine();
       rowp = row;
+
       for (int x = 0; x < width; ++x) {
         if (p) {
           colorMap->getRGB(p, &rgb);
           *rowp++ = colToByte(rgb.r);
           *rowp++ = colToByte(rgb.g);
           *rowp++ = colToByte(rgb.b);
+          printf("@@@ %6d %3d %3d: (%3u,%3u,%3u)\n",
+                 rowp - row, y, x, rgb.r, rgb.g, rgb.b);
           p += colorMap->getNumPixelComps();
         } else {
           *rowp++ = 0;
@@ -512,6 +517,8 @@ void ImageOutputDev::writeImage(GfxState *state, Object *ref, Stream *str,
   ImageFormat format;
   EmbedStream *embedStr;
 
+  printf("writeImage: str=%d\n", str->getKind());
+
   if (inlineImg) {
       embedStr = (EmbedStream *) (str->getBaseStream());
       // Record the stream. This determines the size.
@@ -595,6 +602,10 @@ void ImageOutputDev::writeImage(GfxState *state, Object *ref, Stream *str,
 
 #ifdef ENABLE_LIBPNG
     ImgWriter *writer;
+
+    printf("writing png: colorMap cpts=%d bits=%d\n", colorMap->getNumPixelComps(), colorMap->getBits());
+    // int *x = 0;
+    // *x = 0xFFF;
 
     if (!colorMap || (colorMap->getNumPixelComps() == 1 && colorMap->getBits() == 1)) {
       writer = new PNGWriter(PNGWriter::MONOCHROME);
@@ -695,6 +706,8 @@ void ImageOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
                                int width, int height,
                                GfxImageColorMap *colorMap,
                                bool interpolate, int *maskColors, bool inlineImg) {
+  printf("drawImage: %d x %d intep=%d inline=%d\n", width, height, interpolate, inlineImg);
+
   if (listImages)
     listImage(state, ref, str, width, height, colorMap, interpolate, inlineImg, imgImage);
   else

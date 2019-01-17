@@ -118,6 +118,7 @@ void Stream::getRawChars(int nChars, int *buffer) {
 }
 
 char *Stream::getLine(char *buf, int size) {
+  printf("Stream::getLine: size=%d\n", size);
   int i;
   int c;
 
@@ -147,6 +148,8 @@ Stream *Stream::addFilters(Dict *dict, int recursion) {
   Object params, params2;
   Stream *str;
   int i;
+
+  printf("addFilters: recursion=%d\n", recursion);
 
   str = this;
   obj = dict->lookup("Filter", recursion);
@@ -215,6 +218,7 @@ Stream *Stream::makeFilter(const char *name, Stream *str, Object *params, int re
   int columns, rows;
   Object obj;
 
+  printf("makeFilter: name=%s\n", name);
   if (!strcmp(name, "ASCIIHexDecode") || !strcmp(name, "AHx")) {
     str = new ASCIIHexStream(str);
   } else if (!strcmp(name, "ASCII85Decode") || !strcmp(name, "A85")) {
@@ -496,6 +500,7 @@ bool ImageStream::getPixel(unsigned char *pix) {
 }
 
 unsigned char *ImageStream::getLine() {
+  printf("ImageStream::getLine: \n");
   if (unlikely(inputLine == nullptr)) {
       return nullptr;
   }
@@ -585,18 +590,22 @@ StreamPredictor::~StreamPredictor() {
 
 int StreamPredictor::lookChar() {
   if (predIdx >= rowBytes) {
+    printf("StreamPredictor::lookChar predIdx=%d->", predIdx);
     if (!getNextLine()) {
       return EOF;
     }
+    printf("%d\n", predIdx);
   }
   return predLine[predIdx];
 }
 
 int StreamPredictor::getChar() {
   if (predIdx >= rowBytes) {
+    printf("StreamPredictor::getChar predIdx=%d->", predIdx);
     if (!getNextLine()) {
       return EOF;
     }
+    printf("%d\n", predIdx);
   }
   return predLine[predIdx++];
 }
@@ -641,9 +650,24 @@ bool StreamPredictor::getNextLine() {
     curPred = predictor;
   }
 
+  printf("~~ predictor=%d curPred=%d\n", predictor, curPred);
+
   // read the raw line, apply PNG (byte) predictor
   int *rawCharLine = new int[rowBytes - pixBytes];
   str->getRawChars(rowBytes - pixBytes, rawCharLine);
+
+  // {
+  //   int n = rowBytes - pixBytes;
+  //   printf("outData=%d [", n);
+  //   for (int i = 0; i < n && i < 20; i++) {
+  //     int a = rawCharLine[i];
+  //     printf("%d, ",  a);
+  //   }
+  //   printf("]\n");
+  // }
+
+  // printf(" pixBytes=%d rowBytes=%d\n", pixBytes, rowBytes);
+
   memset(upLeftBuf, 0, pixBytes + 1);
   for (i = pixBytes; i < rowBytes; ++i) {
     for (j = pixBytes; j > 0; --j) {
@@ -660,16 +684,31 @@ bool StreamPredictor::getNextLine() {
       delete[] rawCharLine;
       return false;
     }
+    printf("curPred=%d -- ", curPred);
     switch (curPred) {
     case 11:                        // PNG sub
       predLine[i] = predLine[i - pixBytes] + (unsigned char)c;
+      // printf("$$$ i=%4d: pixBytes=%d c=%d - %d->%d\n",
+      //        i, pixBytes, c, predLine[i - pixBytes], predLine[i]);
       break;
     case 12:                        // PNG up
+    {
+      // unsigned char before = predLine[i];
       predLine[i] = predLine[i] + (unsigned char)c;
+      // printf("$$$ i=%4d: c=%d - %u->%u ", i, c, before, predLine[i]);
+      // {
+      //    int n = rowBytes - pixBytes;
+      //    printf(" predLine=%d [", n);
+      //    for (int k = 1; k <= n; k++) {
+      //      int b = predLine[k];
+      //      printf("%d,", b);
+      //    }
+      //    printf("]\n");
+      //  }
+     }
       break;
     case 13:                        // PNG average
-      predLine[i] = ((predLine[i - pixBytes] + predLine[i]) >> 1) +
-                    (unsigned char)c;
+      predLine[i] = ((predLine[i - pixBytes] + predLine[i]) >> 1) + (unsigned char)c;
       break;
     case 14:                        // PNG Paeth
       left = predLine[i - pixBytes];
@@ -692,7 +731,17 @@ bool StreamPredictor::getNextLine() {
     case 10:                        // PNG none
     default:                        // no predictor or TIFF predictor
       predLine[i] = (unsigned char)c;
+      printf("&&&& %4d: %3d\n", i, predLine[i]);
       break;
+    }
+    // printf("^^ i=%4d c=%3u pred=%3u\n", i + 1, c, predLine[i]);
+  }
+  {
+    int n = rowBytes - pixBytes;
+    for (int i = 0; i < n; i++) {
+      int a = rawCharLine[i];
+      int b = predLine[i];
+      printf("%8d: %3d->%3d\n", i, a, b);
     }
   }
   delete[] rawCharLine;
@@ -1646,8 +1695,7 @@ void CCITTFaxStream::reset() {
 inline void CCITTFaxStream::addPixels(int a1, int blackPixels) {
   if (a1 > codingLine[a0i]) {
     if (a1 > columns) {
-      error(errSyntaxError, getPos(),
-            "CCITTFax row is wrong length ({0:d})", a1);
+      error(errSyntaxError, getPos(), "CCITTFax row is wrong length ({0:d})", a1);
       err = true;
       a1 = columns;
     }
@@ -4588,8 +4636,15 @@ int FlateStream::lookChar() {
 }
 
 void FlateStream::getRawChars(int nChars, int *buffer) {
-  for (int i = 0; i < nChars; ++i)
+  printf("FlateStream::getRawChars(%d) [", nChars);
+  for (int i = 0; i < nChars; ++i) {
     buffer[i] = doGetRawChar();
+    printf(" %d:%d, ", i, buffer[i]);
+    if (i != 0 && i % 3 == 0) {
+      printf(",,   ");
+    }
+  }
+  printf("]\n");
 }
 
 int FlateStream::getRawChar() {

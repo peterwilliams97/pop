@@ -129,6 +129,8 @@ void OutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
                           bool interpolate, int *maskColors, bool inlineImg) {
   int i, j;
 
+  printf("OutputDev::drawImage: %d x %d\n", width, height);
+
   if (inlineImg) {
     str->reset();
     j = height * ((width * colorMap->getNumPixelComps() *
@@ -137,6 +139,7 @@ void OutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
       str->getChar();
     str->close();
   }
+  printf("OutputDev::drawImage: done\n");
 }
 
 void OutputDev::drawMaskedImage(GfxState *state, Object *ref, Stream *str,

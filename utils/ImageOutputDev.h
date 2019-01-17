@@ -58,7 +58,7 @@ public:
   };
 
   // Create an OutputDev which will write images to files named
-  // <fileRoot>-NNN.<type> or <fileRoot>-PPP-NNN.<type>, if 
+  // <fileRoot>-NNN.<type> or <fileRoot>-PPP-NNN.<type>, if
   // <pageNames> is set. Normally, all images are written as PBM
   // (.pbm) or PPM (.ppm) files unless PNG or Tiff output is enabled
   // (PNG is used if both are enabled).  If Jpeg is enabled, JPEG images
@@ -102,9 +102,8 @@ public:
   bool needNonText() override { return true; }
 
   // Start a page
-  void startPage(int pageNumA, GfxState *state, XRef *xref)  override
-			{ pageNum = pageNumA; }
- 
+  void startPage(int pageNumA, GfxState *state, XRef *xref)  override { pageNum = pageNumA; }
+
   //---- get info about output device
 
   // Does this device use upside-down coordinates?
@@ -116,41 +115,41 @@ public:
 
   //----- path painting
   bool tilingPatternFill(GfxState *state, Gfx *gfx, Catalog *cat, Object *str,
-			  const double *pmat, int paintType, int tilingType, Dict *resDict,
-			  const double *mat, const double *bbox,
-			  int x0, int y0, int x1, int y1,
-			  double xStep, double yStep) override;
+                          const double *pmat, int paintType, int tilingType, Dict *resDict,
+                          const double *mat, const double *bbox,
+                          int x0, int y0, int x1, int y1,
+                          double xStep, double yStep) override;
 
   //----- image drawing
   void drawImageMask(GfxState *state, Object *ref, Stream *str,
-		     int width, int height, bool invert,
-		     bool interpolate, bool inlineImg) override;
+                     int width, int height, bool invert,
+                     bool interpolate, bool inlineImg) override;
   void drawImage(GfxState *state, Object *ref, Stream *str,
-		 int width, int height, GfxImageColorMap *colorMap,
-		 bool interpolate, int *maskColors, bool inlineImg) override;
+                 int width, int height, GfxImageColorMap *colorMap,
+                 bool interpolate, int *maskColors, bool inlineImg) override;
   void drawMaskedImage(GfxState *state, Object *ref, Stream *str,
-		       int width, int height,
-		       GfxImageColorMap *colorMap,
-		       bool interpolate,
-		       Stream *maskStr, int maskWidth, int maskHeight,
-		       bool maskInvert, bool maskInterpolate) override;
+                       int width, int height,
+                       GfxImageColorMap *colorMap,
+                       bool interpolate,
+                       Stream *maskStr, int maskWidth, int maskHeight,
+                       bool maskInvert, bool maskInterpolate) override;
   void drawSoftMaskedImage(GfxState *state, Object *ref, Stream *str,
-			   int width, int height,
-			   GfxImageColorMap *colorMap,
-			   bool interpolate,
-			   Stream *maskStr,
-			   int maskWidth, int maskHeight,
-			   GfxImageColorMap *maskColorMap,
-			   bool maskInterpolate) override;
+                           int width, int height,
+                           GfxImageColorMap *colorMap,
+                           bool interpolate,
+                           Stream *maskStr,
+                           int maskWidth, int maskHeight,
+                           GfxImageColorMap *maskColorMap,
+                           bool maskInterpolate) override;
 
 private:
   // Sets the output filename with a given file extension
   void setFilename(const char *fileExt);
   void listImage(GfxState *state, Object *ref, Stream *str,
-		 int width, int height,
-		 GfxImageColorMap *colorMap,
-		 bool interpolate, bool inlineImg,
-		 ImageType imageType);
+                 int width, int height,
+                 GfxImageColorMap *colorMap,
+                 bool interpolate, bool inlineImg,
+                 ImageType imageType);
   void writeImage(GfxState *state, Object *ref, Stream *str,
                   int width, int height, GfxImageColorMap *colorMap, bool inlineImg);
   void writeRawImage(Stream *str, const char *ext);
@@ -158,19 +157,19 @@ private:
                       Stream *str, int width, int height, GfxImageColorMap *colorMap);
   long getInlineImageLength(Stream *str, int width, int height, GfxImageColorMap *colorMap);
 
-  char *fileRoot;		// root of output file names
-  char *fileName;		// buffer for output file names
-  bool listImages;		// list images instead of dumping
-  bool dumpJPEG;		// set to dump native JPEG files
-  bool dumpJP2;		// set to dump native JPEG2000 files
-  bool dumpJBIG2;		// set to dump native JBIG2 files
-  bool dumpCCITT;		// set to dump native CCITT files
-  bool outputPNG;		// set to output in PNG format
-  bool outputTiff;		// set to output in TIFF format
-  bool pageNames;		// set to include page number in file names
-  int pageNum;			// current page number
-  int imgNum;			// current image number
-  bool ok;			// set up ok?
+  char *fileRoot;                // root of output file names
+  char *fileName;                // buffer for output file names
+  bool listImages;               // list images instead of dumping
+  bool dumpJPEG;                 // set to dump native JPEG files
+  bool dumpJP2;                  // set to dump native JPEG2000 files
+  bool dumpJBIG2;                // set to dump native JBIG2 files
+  bool dumpCCITT;                // set to dump native CCITT files
+  bool outputPNG;                // set to output in PNG format
+  bool outputTiff;               // set to output in TIFF format
+  bool pageNames;                // set to include page number in file names
+  int pageNum;                   // current page number
+  int imgNum;                    // current image number
+  bool ok;                       // set up ok?
 };
 
 #endif

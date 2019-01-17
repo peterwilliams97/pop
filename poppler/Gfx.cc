@@ -4887,6 +4887,8 @@ void Gfx::opBeginImage(Object args[], int numArgs) {
   Stream *str;
   int c1, c2;
 
+  printf("opBeginImage\n");
+
   // NB: this function is run even if ocState is false -- doImage() is
   // responsible for skipping over the inline image data
 
@@ -4910,6 +4912,8 @@ void Gfx::opBeginImage(Object args[], int numArgs) {
 
 Stream *Gfx::buildImageStream() {
   Stream *str;
+
+  printf("buildImageStream\n");
 
   // build dictionary
   Object dict(new Dict(xref));

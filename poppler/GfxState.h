@@ -254,8 +254,7 @@ public:
 
   // Return the default ranges for each component, assuming an image
   // with a max pixel value of <maxImgPixel>.
-  virtual void getDefaultRanges(double *decodeLow, double *decodeRange,
-                                int maxImgPixel);
+  virtual void getDefaultRanges(double *decodeLow, double *decodeRange, int maxImgPixel);
 
   // Returns true if painting operations in this color space never
   // mark the page (e.g., the "None" colorant).

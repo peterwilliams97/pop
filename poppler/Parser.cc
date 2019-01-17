@@ -62,17 +62,18 @@ Object Parser::getObj(int recursion)
   return getObj(false, nullptr, cryptRC4, 0, 0, 0, recursion);
 }
 
-Object Parser::getObj(bool simpleOnly,
-           unsigned char *fileKey,
-		       CryptAlgorithm encAlgorithm, int keyLength,
-		       int objNum, int objGen, int recursion,
-		       bool strict) {
+Object Parser::getObj(bool simpleOnly, unsigned char *fileKey,
+                      CryptAlgorithm encAlgorithm, int keyLength,
+                      int objNum, int objGen, int recursion,
+                      bool strict) {
   Object obj;
   Stream *str;
   DecryptStream *decrypt;
   const GooString *s;
   GooString *s2;
   int c;
+
+  // printf("getObj: %d %d obj recursion=%d strict=%d\n", objNum, objGen, recursion, strict);
 
   // refill buffer after inline image data
   if (inlineImg == 2) {
@@ -106,22 +107,22 @@ Object Parser::getObj(bool simpleOnly,
     obj = Object(new Dict(xref));
     while (!buf1.isCmd(">>") && !buf1.isEOF()) {
       if (!buf1.isName()) {
-	error(errSyntaxError, getPos(), "Dictionary key must be a name object");
-	if (strict) goto err;
-	shift();
+        error(errSyntaxError, getPos(), "Dictionary key must be a name object");
+        if (strict) goto err;
+        shift();
       } else {
-	// buf1 will go away in shift(), so keep the key
-	const auto key = std::move(buf1);
-	shift();
-	if (buf1.isEOF() || buf1.isError()) {
-	  if (strict && buf1.isError()) goto err;
-	  break;
-	}
-	Object obj2 = getObj(false, fileKey, encAlgorithm, keyLength, objNum, objGen, recursion + 1);
-	if (unlikely(obj2.isError() && recursion + 1 >= recursionLimit)) {
-	  break;
-	}
-	obj.dictAdd(key.getName(), std::move(obj2));
+        // buf1 will go away in shift(), so keep the key
+        const auto key = std::move(buf1);
+        shift();
+        if (buf1.isEOF() || buf1.isError()) {
+          if (strict && buf1.isError()) goto err;
+          break;
+        }
+        Object obj2 = getObj(false, fileKey, encAlgorithm, keyLength, objNum, objGen, recursion + 1);
+        if (unlikely(obj2.isError() && recursion + 1 >= recursionLimit)) {
+          break;
+        }
+        obj.dictAdd(key.getName(), std::move(obj2));
       }
     }
     if (buf1.isEOF()) {
@@ -165,8 +166,8 @@ Object Parser::getObj(bool simpleOnly,
     s = buf1.getString();
     s2 = new GooString();
     decrypt = new DecryptStream(new MemStream(s->c_str(), 0, s->getLength(), Object(objNull)),
-				fileKey, encAlgorithm, keyLength,
-				objNum, objGen);
+                                fileKey, encAlgorithm, keyLength,
+                                objNum, objGen);
     decrypt->reset();
     while ((c = decrypt->getChar()) != EOF) {
       s2->append((char)c);
@@ -191,25 +192,25 @@ err:
 }
 
 Stream *Parser::makeStream(Object &&dict, unsigned char *fileKey,
-			   CryptAlgorithm encAlgorithm, int keyLength,
-			   int objNum, int objGen, int recursion,
+                           CryptAlgorithm encAlgorithm, int keyLength,
+                           int objNum, int objGen, int recursion,
                            bool strict) {
   BaseStream *baseStr;
   Stream *str;
   Goffset length;
   Goffset pos, endPos;
 
+  printf("makeStream: %d %d obj recursion=%d strict=%d\n", objNum, objGen, recursion, strict);
 
   if (xref) {
     XRefEntry *entry = xref->getEntry(objNum, false);
     if (entry) {
-      if (!entry->getFlag(XRefEntry::Parsing) ||
-	  (objNum == 0 && objGen == 0)) {
-	entry->setFlag(XRefEntry::Parsing, true);
+      if (!entry->getFlag(XRefEntry::Parsing) || (objNum == 0 && objGen == 0)) {
+        entry->setFlag(XRefEntry::Parsing, true);
       } else {
-	error(errSyntaxError, getPos(),
-	      "Object '{0:d} {1:d} obj' is being already parsed", objNum, objGen);
-	return nullptr;
+        error(errSyntaxError, getPos(),
+              "Object '{0:d} {1:d} obj' is being already parsed", objNum, objGen);
+        return nullptr;
       }
     }
   }
@@ -287,8 +288,7 @@ Stream *Parser::makeStream(Object &&dict, unsigned char *fileKey,
 
   // handle decryption
   if (fileKey) {
-    str = new DecryptStream(str, fileKey, encAlgorithm, keyLength,
-			    objNum, objGen);
+    str = new DecryptStream(str, fileKey, encAlgorithm, keyLength, objNum, objGen);
   }
 
   // get filters
@@ -317,11 +317,11 @@ void Parser::shift(int objNum) {
       inlineImg = 0;
     }
   } else if (buf2.isCmd("ID")) {
-    lexer->skipChar();		// skip char after 'ID' command
+    lexer->skipChar();               // skip char after 'ID' command
     inlineImg = 1;
   }
   buf1 = std::move(buf2);
-  if (inlineImg > 0)		// don't buffer inline image data
+  if (inlineImg > 0)                // don't buffer inline image data
     buf2.setToNull();
   else {
     buf2 = lexer->getObj(objNum);
@@ -338,7 +338,7 @@ void Parser::shift(const char *cmdA, int objNum) {
       inlineImg = 0;
     }
   } else if (buf2.isCmd("ID")) {
-    lexer->skipChar();		// skip char after 'ID' command
+    lexer->skipChar();                // skip char after 'ID' command
     inlineImg = 1;
   }
   buf1 = std::move(buf2);

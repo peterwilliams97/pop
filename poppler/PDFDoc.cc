@@ -355,7 +355,6 @@ PDFDoc::~PDFDoc() {
 #endif
 }
 
-
 // Check for a %%EOF at the end of this stream
 bool PDFDoc::checkFooter() {
   // we look in the last 1024 chars because Adobe does the same
@@ -630,9 +629,9 @@ void PDFDoc::displayPage(OutputDev *out, int page,
 
   if (getPage(page))
     getPage(page)->display(out, hDPI, vDPI,
-                                    rotate, useMediaBox, crop, printing,
-                                    abortCheckCbk, abortCheckCbkData,
-                                    annotDisplayDecideCbk, annotDisplayDecideCbkData, copyXRef);
+                           rotate, useMediaBox, crop, printing,
+                           abortCheckCbk, abortCheckCbkData,
+                           annotDisplayDecideCbk, annotDisplayDecideCbkData, copyXRef);
 
 }
 
@@ -662,11 +661,11 @@ void PDFDoc::displayPageSlice(OutputDev *out, int page,
                               void *annotDisplayDecideCbkData, bool copyXRef) {
   if (getPage(page))
     getPage(page)->displaySlice(out, hDPI, vDPI,
-                                         rotate, useMediaBox, crop,
-                                         sliceX, sliceY, sliceW, sliceH,
-                                         printing,
-                                         abortCheckCbk, abortCheckCbkData,
-                                         annotDisplayDecideCbk, annotDisplayDecideCbkData, copyXRef);
+                                rotate, useMediaBox, crop,
+                                sliceX, sliceY, sliceW, sliceH,
+                                printing,
+                                abortCheckCbk, abortCheckCbkData,
+                                annotDisplayDecideCbk, annotDisplayDecideCbkData, copyXRef);
 }
 
 Links *PDFDoc::getLinks(int page) {

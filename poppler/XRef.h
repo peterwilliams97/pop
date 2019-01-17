@@ -117,9 +117,9 @@ public:
 
   // Set the encryption parameters.
   void setEncryption(int permFlagsA, bool ownerPasswordOkA,
-		     const unsigned char *fileKeyA, int keyLengthA,
-		     int encVersionA, int encRevisionA,
-		     CryptAlgorithm encAlgorithmA);
+                     const unsigned char *fileKeyA, int keyLengthA,
+                     int encVersionA, int encRevisionA,
+                     CryptAlgorithm encAlgorithmA);
   // Mark Encrypt entry as Unencrypted
   void markUnencrypted();
 
@@ -191,7 +191,7 @@ public:
   void setModifiedObject(const Object* o, Ref r);
   Ref addIndirectObject (const Object* o);
   void removeIndirectObject(Ref r);
-  void add(int num, int gen,  Goffset offs, bool used);
+  void add(int num, int gen, Goffset offs, bool used);
 
   // Output XRef table to stream
   void writeTableToFile(OutStream* outStr, bool writeAllEntries);
@@ -204,36 +204,36 @@ public:
 
 private:
 
-  BaseStream *str;		// input stream
-  Goffset start;		// offset in file (to allow for garbage
-				//   at beginning of file)
-  XRefEntry *entries;		// xref entries
-  int capacity;			// size of <entries> array
-  int size;			// number of entries
-  int rootNum, rootGen;		// catalog dict
-  bool ok;			// true if xref table is valid
-  int errCode;			// error code (if <ok> is false)
-  bool xrefReconstructed;	// marker, true if xref was already reconstructed
-  Object trailerDict;		// trailer dictionary
+  BaseStream *str;              // input stream
+  Goffset start;                // offset in file (to allow for garbage
+                                //   at beginning of file)
+  XRefEntry *entries;           // xref entries
+  int capacity;                 // size of <entries> array
+  int size;                     // number of entries
+  int rootNum, rootGen;         // catalog dict
+  bool ok;                      // true if xref table is valid
+  int errCode;                  // error code (if <ok> is false)
+  bool xrefReconstructed;       // marker, true if xref was already reconstructed
+  Object trailerDict;           // trailer dictionary
   bool modified;
-  Goffset *streamEnds;		// 'endstream' positions - only used in
-				//   damaged files
-  int streamEndsLen;		// number of valid entries in streamEnds
-  PopplerCache<Goffset, ObjectStream> objStrs;	// cached object streams
-  bool encrypted;		// true if file is encrypted
-  int encRevision;		
-  int encVersion;		// encryption algorithm
-  CryptAlgorithm encAlgorithm;	// encryption algorithm
-  int keyLength;		// length of key, in bytes
-  int permFlags;		// permission bits
-  unsigned char fileKey[32];		// file decryption key
-  bool ownerPasswordOk;	// true if owner password is correct
-  Goffset prevXRefOffset;		// position of prev XRef section (= next to read)
+  Goffset *streamEnds;          // 'endstream' positions - only used in
+                                //   damaged files
+  int streamEndsLen;            // number of valid entries in streamEnds
+  PopplerCache<Goffset, ObjectStream> objStrs;        // cached object streams
+  bool encrypted;                // true if file is encrypted
+  int encRevision;
+  int encVersion;                // encryption algorithm
+  CryptAlgorithm encAlgorithm;   // encryption algorithm
+  int keyLength;                 // length of key, in bytes
+  int permFlags;                 // permission bits
+  unsigned char fileKey[32];     // file decryption key
+  bool ownerPasswordOk;          // true if owner password is correct
+  Goffset prevXRefOffset;        // position of prev XRef section (= next to read)
   Goffset mainXRefEntriesOffset; // offset of entries in main XRef table
-  bool xRefStream;		// true if last XRef section is a stream
-  Goffset mainXRefOffset;	// position of the main XRef table/stream
-  bool scannedSpecialFlags;	// true if scanSpecialFlags has been called
-  bool strOwner;     // true if str is owned by the instance
+  bool xRefStream;               // true if last XRef section is a stream
+  Goffset mainXRefOffset;        // position of the main XRef table/stream
+  bool scannedSpecialFlags;      // true if scanSpecialFlags has been called
+  bool strOwner;                 // true if str is owned by the instance
   mutable std::recursive_mutex mutex;
 
   int reserve(int newSize);

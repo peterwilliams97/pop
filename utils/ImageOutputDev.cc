@@ -89,7 +89,6 @@ void ImageOutputDev::setFilename(const char *fileExt) {
   }
 }
 
-
 // Print a floating point number between 0 - 9999 using 4 characters
 // eg '1.23', '12.3', ' 123', '1234'
 //
@@ -362,6 +361,9 @@ void ImageOutputDev::writeImageFile(ImgWriter *writer, ImageFormat format, const
   unsigned char zero[gfxColorMaxComps];
   int invert_bits;
 
+  printf("writeImageFile: format=%d ext=%s %d x %d bits=%d\n",
+         format, ext, width, height, colorMap->getBits());
+
   if (writer) {
     setFilename(ext);
     ++imgNum;
@@ -378,8 +380,7 @@ void ImageOutputDev::writeImageFile(ImgWriter *writer, ImageFormat format, const
 
   if (format != imgMonochrome) {
     // initialize stream
-    imgStr = new ImageStream(str, width, colorMap->getNumPixelComps(),
-                             colorMap->getBits());
+    imgStr = new ImageStream(str, width, colorMap->getNumPixelComps(), colorMap->getBits());
     imgStr->reset();
   } else {
     // initialize stream
@@ -406,6 +407,7 @@ void ImageOutputDev::writeImageFile(ImgWriter *writer, ImageFormat format, const
 
   // for each line...
   for (int y = 0; y < height; y++) {
+    printf("writeImageFile: format=%d height=%d y=%d \n", format, height, y);
     switch (format) {
     case imgRGB:
       p = imgStr->getLine();
@@ -417,8 +419,9 @@ void ImageOutputDev::writeImageFile(ImgWriter *writer, ImageFormat format, const
           *rowp++ = colToByte(rgb.r);
           *rowp++ = colToByte(rgb.g);
           *rowp++ = colToByte(rgb.b);
-          printf("@@@ %6d %3d %3d: (%3u,%3u,%3u)\n",
-                 rowp - row, y, x, rgb.r, rgb.g, rgb.b);
+          printf("@@@ %6d %3d %3d: [%d %d %d](%5.1f,%5.1f,%5.1f)\n",
+                 rowp - row, y, x, p[0], p[1], p[2],
+                 double(rgb.r) / 256.0,  double(rgb.g) / 256.0,  double(rgb.b) / 256.0);
           p += colorMap->getNumPixelComps();
         } else {
           *rowp++ = 0;
@@ -497,6 +500,7 @@ void ImageOutputDev::writeImageFile(ImgWriter *writer, ImageFormat format, const
         writer->writeRow(&row);
       break;
     }
+    printf("writeImageFile: y=%d done\n", y);
   }
 
   gfree(row);
@@ -509,6 +513,7 @@ void ImageOutputDev::writeImageFile(ImgWriter *writer, ImageFormat format, const
     writer->close();
     fclose(f);
   }
+  printf("writeImageFile: done \n");
 }
 
 void ImageOutputDev::writeImage(GfxState *state, Object *ref, Stream *str,
@@ -517,7 +522,7 @@ void ImageOutputDev::writeImage(GfxState *state, Object *ref, Stream *str,
   ImageFormat format;
   EmbedStream *embedStr;
 
-  printf("writeImage: str=%d\n", str->getKind());
+  printf("writeImage: str=%d %d x %d inline=%d\n", str->getKind(), width, height, inlineImg);
 
   if (inlineImg) {
       embedStr = (EmbedStream *) (str->getBaseStream());

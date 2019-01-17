@@ -22,6 +22,8 @@
 FlateStream::FlateStream(Stream *strA, int predictor, int columns, int colors, int bits) :
   FilterStream(strA)
 {
+  printf("FlateStream: predictor=%d columns=%d colors=%d bits=%d\n",
+         predictor, columns, colors, bits);
   if (predictor != 1) {
     pred = new StreamPredictor(this, predictor, columns, colors, bits);
   } else {
@@ -59,8 +61,12 @@ int FlateStream::getRawChar() {
 }
 
 void FlateStream::getRawChars(int nChars, int *buffer) {
-  for (int i = 0; i < nChars; ++i)
+  printf("FlateStream::getRawChars(%d) [", nChars);
+  for (int i = 0; i < nChars; ++i) {
     buffer[i] = doGetRawChar();
+    printf(" %d:%d, ", i, buffer[i]);
+  }
+  printf("]\n");
 }
 
 int FlateStream::getChar() {
@@ -96,17 +102,17 @@ int FlateStream::fill_buffer() {
     while (1) {
       /* buffer is empty so we need to fill it */
       if (d_stream.avail_in == 0) {
-	int c;
-	/* read from the source stream */
-	while (d_stream.avail_in < sizeof(in_buf) && (c = str->getChar()) != EOF) {
-	  in_buf[d_stream.avail_in++] = c;
-	}
-	d_stream.next_in = in_buf;
+        int c;
+        /* read from the source stream */
+        while (d_stream.avail_in < sizeof(in_buf) && (c = str->getChar()) != EOF) {
+          in_buf[d_stream.avail_in++] = c;
+        }
+        d_stream.next_in = in_buf;
       }
 
       /* keep decompressing until we can't anymore */
       if (d_stream.avail_out == 0 || d_stream.avail_in == 0 || (status != Z_OK && status != Z_BUF_ERROR))
-	break;
+        break;
       status = inflate(&d_stream, Z_SYNC_FLUSH);
     }
 

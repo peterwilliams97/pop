@@ -50,7 +50,7 @@ private:
   inline int doGetRawChar() {
     if (fill_buffer())
       return EOF;
-
+    printf("   out_buf[%d]=%d\n", out_pos, out_buf[out_pos]);
     return out_buf[out_pos++];
   }
 
